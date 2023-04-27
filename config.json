@@ -1,7 +1,0 @@
-{
-  "dbHost": "auditordb.inep.gov.br",
-  "dbPort": 3306,
-  "dbUsername": "auditor",
-  "dbPassword": "4ud1t0r",
-  "dbName": "eAud"
-}

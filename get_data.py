@@ -6,7 +6,7 @@ conn = None
 
 try:
     # Get the path to the config.json file
-    config_file = os.path.join(os.path.dirname(__file__), "config.json")
+    config_file = os.path.join(os.path.dirname(__file__), "sec\\config.json")
 
     # Read the contents of the config.json file
     with open(config_file, 'r') as f:

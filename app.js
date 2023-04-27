@@ -58,11 +58,13 @@ selects.forEach(select => select.disabled = true);
 
 window.addEventListener('load', function() {
   document.querySelector('.box').style.display = 'flex';
-  const xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      console.log(this.responseText); // Log the response from the server
-      const rows = JSON.parse(this.responseText);
+  $.ajax({
+    url: 'getData.aspx',
+    type: 'GET',
+    dataType: 'json',
+    success: function(data) {
+      console.log(data); // Log the response from the server
+      const rows = data;
       const codIndex = rows[0].indexOf("CodDemanda");
       const tipoIndex = rows[0].indexOf("Tipo de Demanda");
       const codAtividadeIndex = rows[0].indexOf("CodAtividade");
@@ -92,7 +94,6 @@ window.addEventListener('load', function() {
         if (isNaN(option.value)){option.value = '';}
         selectDDD.add(option);
       }
-
       // AT
       selectDDD.addEventListener('change', function() {
         // Clear AT options
@@ -122,7 +123,7 @@ window.addEventListener('load', function() {
           option.value = valuesAT[i];
           selectAT.add(option);
         }
-        
+
         // Trigger change event to populate PP options
         selectAT.dispatchEvent(new Event('change'));
       });
@@ -163,10 +164,12 @@ window.addEventListener('load', function() {
       selectDDD.dispatchEvent(new Event('change'));
       
       document.querySelector('.box').style.display = 'none';
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log('AJAX request failed:', textStatus, errorThrown);
+      // código para lidar com a falha da solicitação
     }
-  };
-  xhr.open("GET", "get_data.php", true);
-  xhr.send();
+  });
 });
 
 primeiraColuna.addEventListener('change', function() {
