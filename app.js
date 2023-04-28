@@ -93,7 +93,7 @@ window.addEventListener('load', function() {
 
       // Enable DDD select
       document.getElementById("DDD").disabled = false;
-      
+
       document.querySelector('.box').style.display = 'none';
     });
 });
@@ -142,37 +142,42 @@ selectDDD.addEventListener('change', function() {
   // Disable ISP select
   document.getElementById("ISP").disabled = true;
 
-    if (selectDDD.value !== '') {
-      // Enable AT select
-      document.getElementById("AT").disabled = false;
-      
-      // Filter rows by selected DDD value
-      const filteredRows = rows.filter(row => row.CodDemanda == this.value);
-      
-      // Populate AT options
-      const optionsAT = ['Atividade'];
-      const valuesAT = [''];
-      for (let i = 0; i < filteredRows.length; i++) {
-        const codAtividade = filteredRows[i].CodAtividade;
-        let atividade = filteredRows[i].Atividade;
-        if (codAtividade === undefined && atividade === undefined) {
-          break;
-        }
-        if (atividade === '-') {
-          atividade = '';
-        }
-        if ((codAtividade && atividade !== undefined && !optionsAT.includes(atividade)) && (codAtividade !== undefined && atividade !== undefined)) {
-          optionsAT.push(atividade);
-          valuesAT.push(codAtividade);
-        }
+  if (selectDDD.value !== '') {
+    // Enable AT select
+    document.getElementById("AT").disabled = false;
+
+    // Filter rows by selected DDD value
+    const filteredRows = rows.filter(row => row.CodDemanda == this.value);
+
+    // Populate AT options
+    const optionsAT = ['Atividade'];
+    const valuesAT = [''];
+    for (let i = 0; i < filteredRows.length; i++) {
+      const codAtividade = filteredRows[i].CodAtividade;
+      let atividade = filteredRows[i].Atividade;
+      if (codAtividade === undefined && atividade === undefined) {
+        break;
       }
-      for (let i = 0; i < optionsAT.length; i++) {
-        const option = document.createElement("option");
-        option.text = optionsAT[i];
-        option.value = valuesAT[i];
-        selectAT.add(option);
+      if (atividade === '-') {
+        atividade = '';
       }
-  } else { 
+      if ((codAtividade && atividade !== undefined && !optionsAT.includes(atividade)) && (codAtividade !== undefined && atividade !== undefined)) {
+        optionsAT.push(atividade);
+        valuesAT.push(codAtividade);
+      }
+    }
+    // Sort options by value
+    const sortedOptions = optionsAT.map((option, index) => ({ text: option, value: valuesAT[index] }))
+      .sort((a, b) => a.value - b.value);
+
+    // Add sorted options to selectAT
+    for (let i = 0; i < sortedOptions.length; i++) {
+      const option = document.createElement("option");
+      option.text = sortedOptions[i].text;
+      option.value = sortedOptions[i].value;
+      selectAT.add(option);
+    }
+  } else {
     // Clear AT options
     const selectAT = document.getElementById("AT");
     selectAT.innerHTML = '';
@@ -220,14 +225,14 @@ selectAT.addEventListener('change', function() {
 
   // Disable ISP select
   document.getElementById("ISP").disabled = true;
-  
-  if (selectAT.value !== '' && selectDDD.value !== '') { 
+
+  if (selectAT.value !== '' && selectDDD.value !== '') {
     // Enable PP select
     document.getElementById("PP").disabled = false;
 
     // Filter rows by selected DDD and AT values
     const filteredRows = rows.filter(row => row.CodDemanda == selectDDD.value && row.CodAtividade == this.value);
-    
+
     // Populate PP options
     const optionsPP = ['Produto'];
     const valuesPP = [''];
@@ -252,17 +257,22 @@ selectAT.addEventListener('change', function() {
       valuesPP.push('');
     }
 
-    for (let i = 0; i < optionsPP.length; i++) {
+    // Sort options by value
+    const sortedOptions = optionsPP.map((option, index) => ({ text: option, value: valuesPP[index] }))
+      .sort((a, b) => a.value - b.value);
+
+    // Add sorted options to selectPP
+    for (let i = 0; i < sortedOptions.length; i++) {
       const option = document.createElement("option");
-      option.text = optionsPP[i];
-      option.value = valuesPP[i];
+      option.text = sortedOptions[i].text;
+      option.value = sortedOptions[i].value;
       selectPP.add(option);
     }
   } else {
     // Clear PP options
     const selectPP = document.getElementById("PP");
     selectPP.innerHTML = '';
-  
+
     // Enable PP select
     document.getElementById("PP").disabled = true;
   }
@@ -302,7 +312,7 @@ terceiraColuna.addEventListener('change', function() {
   // Disable ISP select
   document.getElementById("ISP").disabled = true;
 
-    if (selectPP.value !== '' && selectAT.value !== '' && selectDDD.value !== '') {
+  if (selectPP.value !== '' && selectAT.value !== '' && selectDDD.value !== '') {
 
     var ano, acao, sprint;
 
@@ -322,8 +332,8 @@ terceiraColuna.addEventListener('change', function() {
             option.value = item.value;
             option.text = item.text;
             selectSP.add(option);
-      });
-          
+          });
+
         })
         .catch(error => {
           // Handle errors here
@@ -351,18 +361,18 @@ terceiraColuna.addEventListener('change', function() {
           // Handle errors here
           console.error("Erro ano.json: ", error);
         });
-      if (selectDDD.value == 1){
+      if (selectDDD.value == 1) {
         document.getElementById("YYYY").disabled = false;
         document.getElementById("SP").disabled = true;
       }
-      if ([2, 3, 4].includes(Number(selectDDD.value))){
+      if ([2, 3, 4].includes(Number(selectDDD.value))) {
         document.getElementById("YYYY").disabled = false;
         document.getElementById("SP").disabled = false;
       }
-    } else if (selectDDD.value == 5){
-        document.getElementById("YYYY").disabled = false;
-        document.getElementById("SP").disabled = true;
-        let tasksSelect = document.getElementById("IPP");
+    } else if (selectDDD.value == 5) {
+      document.getElementById("YYYY").disabled = false;
+      document.getElementById("SP").disabled = true;
+      let tasksSelect = document.getElementById("IPP");
       fetch('ano.json')
         .then(response => response.json())
         .then(data => {
@@ -384,49 +394,49 @@ terceiraColuna.addEventListener('change', function() {
           // Handle errors here
           console.error("Erro ano.json: ", error);
         });
-        fetch('idEaudMonitoramento.json')
+      fetch('idEaudMonitoramento.json')
         .then(response => response.json())
         .then(data => {
           // Populate select element with data from JSON file
           for (let task in data) {
-              let option = document.createElement("option");
-              option.text = task;
-              tasksSelect.add(option);
-              }
+            let option = document.createElement("option");
+            option.text = task;
+            tasksSelect.add(option);
+          }
         });
-        document.getElementById("IPP").disabled = false;
-      }
-    } else {
-      // Clear YYYY options
-      const selectYYYY = document.getElementById("YYYY");
-      selectYYYY.innerHTML = '';
-      document.getElementById("YYYY").disabled = true;
-      // Clear AA options
-      const selectAA = document.getElementById("AA");
-      selectAA.innerHTML = '';
-      document.getElementById("AA").disabled = true;
-      // Clear SP options
-      const selectSP = document.getElementById("SP");
-      selectSP.innerHTML = '';
-      document.getElementById("SP").disabled = true;
+      document.getElementById("IPP").disabled = false;
     }
+  } else {
+    // Clear YYYY options
+    const selectYYYY = document.getElementById("YYYY");
+    selectYYYY.innerHTML = '';
+    document.getElementById("YYYY").disabled = true;
+    // Clear AA options
+    const selectAA = document.getElementById("AA");
+    selectAA.innerHTML = '';
+    document.getElementById("AA").disabled = true;
+    // Clear SP options
+    const selectSP = document.getElementById("SP");
+    selectSP.innerHTML = '';
+    document.getElementById("SP").disabled = true;
+  }
 
-    var selectDDD = document.getElementById("DDD");
+  var selectDDD = document.getElementById("DDD");
 
-    document.getElementById("ISP").disabled = true;
+  document.getElementById("ISP").disabled = true;
 
-    // Clear ISP options
-    selectISP.innerHTML = '';
+  // Clear ISP options
+  selectISP.innerHTML = '';
 
-    // Disable ISP select
-    document.getElementById("ISP").disabled = true;
+  // Disable ISP select
+  document.getElementById("ISP").disabled = true;
 
-    if (([2, 3, 4].includes(Number(selectDDD.value)))) {
-      document.getElementById("ISP").disabled = false;
-    } else if (selectDDD.value === 5) {
-      document.getElementById("ISP").disabled = false;
-      } else {document.getElementById("ISP").disabled = true;}
-  });
+  if (([2, 3, 4].includes(Number(selectDDD.value)))) {
+    document.getElementById("ISP").disabled = false;
+  } else if (selectDDD.value === 5) {
+    document.getElementById("ISP").disabled = false;
+  } else { document.getElementById("ISP").disabled = true; }
+});
 
 anoAcao.addEventListener('change', function() {
   // Clear YYYY options
@@ -436,30 +446,30 @@ anoAcao.addEventListener('change', function() {
     document.getElementById("AA").disabled = true;
   } else {
     fetch('acao.json')
-    .then(response => response.json())
-    .then(data => {
-      // Use the data here
-      acao = data;
-      // Get the select elements
-      const selectAA = document.getElementById("AA");
-      const selectYYYY = document.getElementById("YYYY");
+      .then(response => response.json())
+      .then(data => {
+        // Use the data here
+        acao = data;
+        // Get the select elements
+        const selectAA = document.getElementById("AA");
+        const selectYYYY = document.getElementById("YYYY");
 
-      // Filter acao by selected YYYY value
-      const filteredAcao = acao.filter(item => item.year == selectYYYY.value);
+        // Filter acao by selected YYYY value
+        const filteredAcao = acao.filter(item => item.year == selectYYYY.value);
 
-      // Create and append the options to the AA select element
-      filteredAcao.forEach(function(item) {
-        const option = document.createElement("option");
-        option.value = item.value;
-        option.text = item.text;
-        selectAA.add(option);
+        // Create and append the options to the AA select element
+        filteredAcao.forEach(function(item) {
+          const option = document.createElement("option");
+          option.value = item.value;
+          option.text = item.text;
+          selectAA.add(option);
+        });
+        document.getElementById("AA").disabled = false;
+      })
+      .catch(error => {
+        // Handle errors here
+        console.error("Erro acao.json: ", error);
       });
-      document.getElementById("AA").disabled = false;
-    })
-    .catch(error => {
-      // Handle errors here
-      console.error("Erro acao.json: ", error);
-    });
   }
 });
 
@@ -580,9 +590,9 @@ enviar.addEventListener("click", function(event) { // Previne o comportamento pa
   event.preventDefault();
 
   // Aqui começa o seu código 
-  const PAA = AA.value; const PYYYY = YYYY.value; const PPP = PP.value; const PDDD = DDD.value; const PAT = AT.value; const PSP = SP.value; const PIPP = IPP.value; const PISP = ISP.value
+  const PAA = AA.value; const PYYYY = YYYY.value; const PPP = PP.value; const PDDD = DDD.value; const PAT = AT.value; const PSP = SP.value; const PISP = ISP.value
 
-  Ret.value = ('<demanda>'+PDDD+'</demanda><atividade>'+PAT+'</atividade><produto>'+PPP+'</produto><idEaud>'+PIPP+'</idEaud><idSubEaud>'+PISP+'</idSubEaud><anoAcao>'+PYYYY+'</anoAcao><idAcao>'+PAA+'</idAcao><idSprint>'+PSP+'</idSprint>') 
+  Ret.value = ('<demanda>' + PDDD + '</demanda><atividade>' + PAT + '</atividade><produto>' + PPP + '</produto><idEaud>' + PISP + '</idEaud><anoAcao>' + PYYYY + '</anoAcao><idAcao>' + PAA + '</idAcao><idSprint>' + PSP + '</idSprint>')
 });
 
 apagar.addEventListener("click", event => {
@@ -595,7 +605,7 @@ apagar.addEventListener("click", event => {
   SP.value = ''
   IPP.value = ''
   ISP.value = ''
-  Ret.value = '' 
+  Ret.value = ''
   AT.text = 'Atividade'
   PP.text = 'Produto'
 
@@ -613,10 +623,10 @@ apagar.addEventListener("click", event => {
 });
 
 function copiarResultado() {
-   if(Ret.value == "") return;
+  if (Ret.value == "") return;
 
-   Ret.select();
-   navigator.clipboard.writeText(Ret.value); 
+  Ret.select();
+  navigator.clipboard.writeText(Ret.value);
 }
 
 function fixText(text) {
