@@ -1,0 +1,490 @@
+[
+  {
+    "CodDemanda": 1,
+    "Tipo de Demanda": "Planejamento Anual",
+    "CodAtividade": 2,
+    "Atividade": "Elaboração/Atualização do PAINT",
+    "CodProduto": 1,
+    "Produto": "PAINT Preliminar"
+  },
+  {
+    "CodDemanda": 1,
+    "Tipo de Demanda": "Planejamento Anual",
+    "CodAtividade": 2,
+    "Atividade": "Elaboração/Atualização do PAINT",
+    "CodProduto": 2,
+    "Produto": "PAINT Definitivo"
+  },
+  {
+    "CodDemanda": 1,
+    "Tipo de Demanda": "Planejamento Anual",
+    "CodAtividade": 3,
+    "Atividade": "Elaboração/Atualização do RAINT",
+    "CodProduto": 1,
+    "Produto": "RAINT Preliminar"
+  },
+  {
+    "CodDemanda": 1,
+    "Tipo de Demanda": "Planejamento Anual",
+    "CodAtividade": 3,
+    "Atividade": "Elaboração/Atualização do RAINT",
+    "CodProduto": 2,
+    "Produto": "RAINT Definitivo"
+  },
+  {
+    "CodDemanda": 1,
+    "Tipo de Demanda": "Planejamento Anual",
+    "CodAtividade": 1,
+    "Atividade": "Mapeamento do Universo de Auditoria",
+    "CodProduto": 1,
+    "Produto": "Universo de Auditoria"
+  },
+  {
+    "CodDemanda": 2,
+    "Tipo de Demanda": "Avaliação",
+    "CodAtividade": 4,
+    "Atividade": "Achados de Auditoria",
+    "CodProduto": 1,
+    "Produto": "Recomendações cadastradas"
+  },
+  {
+    "CodDemanda": 2,
+    "Tipo de Demanda": "Avaliação",
+    "CodAtividade": 2,
+    "Atividade": "Execução",
+    "CodProduto": 1,
+    "Produto": "Escopo da Auditoria"
+  },
+  {
+    "CodDemanda": 2,
+    "Tipo de Demanda": "Avaliação",
+    "CodAtividade": 2,
+    "Atividade": "Execução",
+    "CodProduto": 2,
+    "Produto": "Papéis de Trabalho"
+  },
+  {
+    "CodDemanda": 2,
+    "Tipo de Demanda": "Avaliação",
+    "CodAtividade": 2,
+    "Atividade": "Execução",
+    "CodProduto": 3,
+    "Produto": "Matriz de Achados"
+  },
+  {
+    "CodDemanda": 2,
+    "Tipo de Demanda": "Avaliação",
+    "CodAtividade": 1,
+    "Atividade": "Planejamento",
+    "CodProduto": 1,
+    "Produto": "Análise Preliminar"
+  },
+  {
+    "CodDemanda": 2,
+    "Tipo de Demanda": "Avaliação",
+    "CodAtividade": 1,
+    "Atividade": "Planejamento",
+    "CodProduto": 2,
+    "Produto": "Matriz de Riscos"
+  },
+  {
+    "CodDemanda": 2,
+    "Tipo de Demanda": "Avaliação",
+    "CodAtividade": 1,
+    "Atividade": "Planejamento",
+    "CodProduto": 3,
+    "Produto": "Matriz de Planejamento"
+  },
+  {
+    "CodDemanda": 2,
+    "Tipo de Demanda": "Avaliação",
+    "CodAtividade": 3,
+    "Atividade": "Relatoria",
+    "CodProduto": 1,
+    "Produto": "Relatório Preliminar"
+  },
+  {
+    "CodDemanda": 2,
+    "Tipo de Demanda": "Avaliação",
+    "CodAtividade": 3,
+    "Atividade": "Relatoria",
+    "CodProduto": 2,
+    "Produto": "Relatório Final"
+  },
+  {
+    "CodDemanda": 3,
+    "Tipo de Demanda": "Consultoria",
+    "CodAtividade": 4,
+    "Atividade": "Achados de Auditoria",
+    "CodProduto": 1,
+    "Produto": "Recomendações cadastradas"
+  },
+  {
+    "CodDemanda": 3,
+    "Tipo de Demanda": "Consultoria",
+    "CodAtividade": 2,
+    "Atividade": "Execução",
+    "CodProduto": 1,
+    "Produto": "Escopo da Auditoria"
+  },
+  {
+    "CodDemanda": 3,
+    "Tipo de Demanda": "Consultoria",
+    "CodAtividade": 2,
+    "Atividade": "Execução",
+    "CodProduto": 2,
+    "Produto": "Papéis de Trabalho"
+  },
+  {
+    "CodDemanda": 3,
+    "Tipo de Demanda": "Consultoria",
+    "CodAtividade": 2,
+    "Atividade": "Execução",
+    "CodProduto": 3,
+    "Produto": "Matriz de Achados"
+  },
+  {
+    "CodDemanda": 3,
+    "Tipo de Demanda": "Consultoria",
+    "CodAtividade": 1,
+    "Atividade": "Planejamento",
+    "CodProduto": 1,
+    "Produto": "Análise Preliminar"
+  },
+  {
+    "CodDemanda": 3,
+    "Tipo de Demanda": "Consultoria",
+    "CodAtividade": 1,
+    "Atividade": "Planejamento",
+    "CodProduto": 2,
+    "Produto": "Matriz de Riscos"
+  },
+  {
+    "CodDemanda": 3,
+    "Tipo de Demanda": "Consultoria",
+    "CodAtividade": 1,
+    "Atividade": "Planejamento",
+    "CodProduto": 3,
+    "Produto": "Matriz de Planejamento"
+  },
+  {
+    "CodDemanda": 3,
+    "Tipo de Demanda": "Consultoria",
+    "CodAtividade": 3,
+    "Atividade": "Relatoria",
+    "CodProduto": 1,
+    "Produto": "Relatório Preliminar"
+  },
+  {
+    "CodDemanda": 3,
+    "Tipo de Demanda": "Consultoria",
+    "CodAtividade": 3,
+    "Atividade": "Relatoria",
+    "CodProduto": 2,
+    "Produto": "Relatório Final"
+  },
+  {
+    "CodDemanda": 4,
+    "Tipo de Demanda": "Apuração",
+    "CodAtividade": 4,
+    "Atividade": "Achados de Auditoria",
+    "CodProduto": 1,
+    "Produto": "Recomendações cadastradas"
+  },
+  {
+    "CodDemanda": 4,
+    "Tipo de Demanda": "Apuração",
+    "CodAtividade": 2,
+    "Atividade": "Execução",
+    "CodProduto": 1,
+    "Produto": "Escopo da Auditoria"
+  },
+  {
+    "CodDemanda": 4,
+    "Tipo de Demanda": "Apuração",
+    "CodAtividade": 2,
+    "Atividade": "Execução",
+    "CodProduto": 2,
+    "Produto": "Papéis de Trabalho"
+  },
+  {
+    "CodDemanda": 4,
+    "Tipo de Demanda": "Apuração",
+    "CodAtividade": 2,
+    "Atividade": "Execução",
+    "CodProduto": 3,
+    "Produto": "Matriz de Achados"
+  },
+  {
+    "CodDemanda": 4,
+    "Tipo de Demanda": "Apuração",
+    "CodAtividade": 1,
+    "Atividade": "Planejamento",
+    "CodProduto": 1,
+    "Produto": "Análise Preliminar"
+  },
+  {
+    "CodDemanda": 4,
+    "Tipo de Demanda": "Apuração",
+    "CodAtividade": 1,
+    "Atividade": "Planejamento",
+    "CodProduto": 2,
+    "Produto": "Matriz de Riscos"
+  },
+  {
+    "CodDemanda": 4,
+    "Tipo de Demanda": "Apuração",
+    "CodAtividade": 1,
+    "Atividade": "Planejamento",
+    "CodProduto": 3,
+    "Produto": "Matriz de Planejamento"
+  },
+  {
+    "CodDemanda": 4,
+    "Tipo de Demanda": "Apuração",
+    "CodAtividade": 3,
+    "Atividade": "Relatoria",
+    "CodProduto": 1,
+    "Produto": "Relatório Preliminar"
+  },
+  {
+    "CodDemanda": 4,
+    "Tipo de Demanda": "Apuração",
+    "CodAtividade": 3,
+    "Atividade": "Relatoria",
+    "CodProduto": 2,
+    "Produto": "Relatório Final"
+  },
+  {
+    "CodDemanda": 5,
+    "Tipo de Demanda": "Monitoramento",
+    "CodAtividade": 2,
+    "Atividade": "Contabilização de benefícios",
+    "CodProduto": 1,
+    "Produto": "Benefício contabilizado"
+  },
+  {
+    "CodDemanda": 5,
+    "Tipo de Demanda": "Monitoramento",
+    "CodAtividade": 1,
+    "Atividade": "Monitoramento das Recomendações",
+    "CodProduto": 1,
+    "Produto": "Recomendação monitorada"
+  },
+  {
+    "CodDemanda": 6,
+    "Tipo de Demanda": "Demandas Externas",
+    "CodAtividade": 2,
+    "Atividade": "Acompanhamento de Demandas CGU",
+    "CodProduto": "",
+    "Produto": ""
+  },
+  {
+    "CodDemanda": 6,
+    "Tipo de Demanda": "Demandas Externas",
+    "CodAtividade": 1,
+    "Atividade": "Acompanhamento de Diligências TCU",
+    "CodProduto": "",
+    "Produto": ""
+  },
+  {
+    "CodDemanda": 6,
+    "Tipo de Demanda": "Demandas Externas",
+    "CodAtividade": 3,
+    "Atividade": "Análise de admissibilidade de Denúncias",
+    "CodProduto": "",
+    "Produto": ""
+  },
+  {
+    "CodDemanda": 6,
+    "Tipo de Demanda": "Demandas Externas",
+    "CodAtividade": 5,
+    "Atividade": "Suporte a Ação de Auditoria da CGU",
+    "CodProduto": "",
+    "Produto": ""
+  },
+  {
+    "CodDemanda": 6,
+    "Tipo de Demanda": "Demandas Externas",
+    "CodAtividade": 4,
+    "Atividade": "Suporte a Ação de Auditoria do TCU",
+    "CodProduto": "",
+    "Produto": ""
+  },
+  {
+    "CodDemanda": 7,
+    "Tipo de Demanda": "PGMQ",
+    "CodAtividade": 1,
+    "Atividade": "Auto-Avaliação do IA-CM",
+    "CodProduto": 1,
+    "Produto": "Matriz de Avaliação"
+  },
+  {
+    "CodDemanda": 7,
+    "Tipo de Demanda": "PGMQ",
+    "CodAtividade": 1,
+    "Atividade": "Auto-Avaliação do IA-CM",
+    "CodProduto": 2,
+    "Produto": "Avaliação IA-CM"
+  },
+  {
+    "CodDemanda": 7,
+    "Tipo de Demanda": "PGMQ",
+    "CodAtividade": 2,
+    "Atividade": "Elaboração de Plano de Ação",
+    "CodProduto": 1,
+    "Produto": "Plano de Ação"
+  },
+  {
+    "CodDemanda": 7,
+    "Tipo de Demanda": "PGMQ",
+    "CodAtividade": 3,
+    "Atividade": "Elaboração de Relatório de Avaliação IA-CM",
+    "CodProduto": 1,
+    "Produto": "Relatório de Avaliação IA-CM"
+  },
+  {
+    "CodDemanda": 8,
+    "Tipo de Demanda": "Demandas Administrativas",
+    "CodAtividade": 1,
+    "Atividade": "Gestão do SEI",
+    "CodProduto": "",
+    "Produto": ""
+  },
+  {
+    "CodDemanda": 8,
+    "Tipo de Demanda": "Demandas Administrativas",
+    "CodAtividade": 2,
+    "Atividade": "Produção/Atualização de documentos",
+    "CodProduto": 1,
+    "Produto": "Normativo"
+  },
+  {
+    "CodDemanda": 8,
+    "Tipo de Demanda": "Demandas Administrativas",
+    "CodAtividade": 2,
+    "Atividade": "Produção/Atualização de documentos",
+    "CodProduto": 2,
+    "Produto": "Parecer"
+  },
+  {
+    "CodDemanda": 8,
+    "Tipo de Demanda": "Demandas Administrativas",
+    "CodAtividade": 2,
+    "Atividade": "Produção/Atualização de documentos",
+    "CodProduto": 3,
+    "Produto": "Manual"
+  },
+  {
+    "CodDemanda": 8,
+    "Tipo de Demanda": "Demandas Administrativas",
+    "CodAtividade": 2,
+    "Atividade": "Produção/Atualização de documentos",
+    "CodProduto": 4,
+    "Produto": "POP"
+  },
+  {
+    "CodDemanda": 9,
+    "Tipo de Demanda": "Demandas de TIC",
+    "CodAtividade": 2,
+    "Atividade": "Desenvolvimento/Manutenção de Aplicativo",
+    "CodProduto": 1,
+    "Produto": "Aplicativo"
+  },
+  {
+    "CodDemanda": 9,
+    "Tipo de Demanda": "Demandas de TIC",
+    "CodAtividade": 3,
+    "Atividade": "Desenvolvimento/Manutenção de Painel Gerencial",
+    "CodProduto": 1,
+    "Produto": "Painel Gerencial"
+  },
+  {
+    "CodDemanda": 9,
+    "Tipo de Demanda": "Demandas de TIC",
+    "CodAtividade": 5,
+    "Atividade": "Gestão do SharePoint",
+    "CodProduto": "",
+    "Produto": ""
+  },
+  {
+    "CodDemanda": 9,
+    "Tipo de Demanda": "Demandas de TIC",
+    "CodAtividade": 4,
+    "Atividade": "Gestão/Suporte e-Aud",
+    "CodProduto": "",
+    "Produto": ""
+  },
+  {
+    "CodDemanda": 9,
+    "Tipo de Demanda": "Demandas de TIC",
+    "CodAtividade": 1,
+    "Atividade": "Manipulação de Base de Dados",
+    "CodProduto": 1,
+    "Produto": "Consulta SQL"
+  },
+  {
+    "CodDemanda": 9,
+    "Tipo de Demanda": "Demandas de TIC",
+    "CodAtividade": 6,
+    "Atividade": "Outros",
+    "CodProduto": "",
+    "Produto": ""
+  },
+  {
+    "CodDemanda": 10,
+    "Tipo de Demanda": "Capacitação",
+    "CodAtividade": 2,
+    "Atividade": "Estudo individual",
+    "CodProduto": "",
+    "Produto": "DGP"
+  },
+  {
+    "CodDemanda": 10,
+    "Tipo de Demanda": "Capacitação",
+    "CodAtividade": 1,
+    "Atividade": "Participação em cursos",
+    "CodProduto": "",
+    "Produto": "DGP"
+  },
+  {
+    "CodDemanda": 11,
+    "Tipo de Demanda": "Ausência",
+    "CodAtividade": 1,
+    "Atividade": "Ausência",
+    "CodProduto": 1,
+    "Produto": "Atestado Médico"
+  },
+  {
+    "CodDemanda": 11,
+    "Tipo de Demanda": "Ausência",
+    "CodAtividade": 1,
+    "Atividade": "Ausência",
+    "CodProduto": 2,
+    "Produto": "Férias"
+  },
+  {
+    "CodDemanda": 12,
+    "Tipo de Demanda": "Participação em reuniões/GT",
+    "CodAtividade": "",
+    "Atividade": "",
+    "CodProduto": "",
+    "Produto": 1
+  },
+  {
+    "CodDemanda": 13,
+    "Tipo de Demanda": "Demandas Extraordinárias",
+    "CodAtividade": "",
+    "Atividade": "",
+    "CodProduto": "",
+    "Produto": 5
+  },
+  {
+    "CodDemanda": 14,
+    "Tipo de Demanda": "Outros",
+    "CodAtividade": "",
+    "Atividade": "",
+    "CodProduto": "",
+    "Produto": ""
+  }
+]

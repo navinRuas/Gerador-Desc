@@ -40,7 +40,6 @@ const PP = document.getElementById('PP');
 const AT = document.getElementById('AT');
 const DDD = document.getElementById('DDD');
 const SP = document.getElementById('SP');
-const IPP = document.getElementById('IPP')
 const ISP = document.getElementById('ISP')
 const enviar = document.getElementById('gerar');
 const apagar = document.getElementById('reset');
@@ -49,35 +48,31 @@ const Ret = document.getElementById('Ret');
 var primeiraColuna = document.getElementById('DDD');
 var segundaColuna = document.getElementById('AT');
 var terceiraColuna = document.getElementById('PP');
+var anoAcao = document.getElementById('YYYY');
 var acaoColuna = document.getElementById('AA');
-var eaudColuna = document.getElementById('IPP');
 
 // Desabilita o elemento select
 const selects = document.querySelectorAll("select");
 selects.forEach(select => select.disabled = true);
+document.getElementById("ISP").disabled = true;
+
+let rows;
+const selectDDD = document.getElementById("DDD");
 
 window.addEventListener('load', function() {
   document.querySelector('.box').style.display = 'flex';
-  $.ajax({
-    url: 'getData.aspx',
-    type: 'GET',
-    dataType: 'json',
-    success: function(data) {
+  fetch('depara.json')
+    .then(response => response.json())
+    .then(data => {
       console.log(data); // Log the response from the server
-      const rows = data;
-      const codIndex = rows[0].indexOf("CodDemanda");
-      const tipoIndex = rows[0].indexOf("Tipo de Demanda");
-      const codAtividadeIndex = rows[0].indexOf("CodAtividade");
-      const atividadeIndex = rows[0].indexOf("Atividade");
-      const codProdutoIndex = rows[0].indexOf("CodProduto");
-      const produtoIndex = rows[0].indexOf("Produto");
+      rows = data;
 
       // DDD
-      const optionsDDD = [];
-      const valuesDDD = [];
-      for (let i = 1; i < rows.length; i++) {
-        const cod = rows[i][codIndex];
-        const tipo = rows[i][tipoIndex];
+      const optionsDDD = ['Tipo de Demanda'];
+      const valuesDDD = [''];
+      for (let i = 0; i < rows.length; i++) {
+        const cod = rows[i].CodDemanda;
+        const tipo = rows[i]['Tipo de Demanda'];
         if (cod === undefined || tipo === undefined) {
           break;
         }
@@ -94,177 +89,180 @@ window.addEventListener('load', function() {
         if (isNaN(option.value)){option.value = '';}
         selectDDD.add(option);
       }
-      // AT
-      selectDDD.addEventListener('change', function() {
-        // Clear AT options
-        const selectAT = document.getElementById("AT");
-        selectAT.innerHTML = '';
-        
-        // Filter rows by selected DDD value
-        const filteredRows = rows.filter(row => row[codIndex] == this.value);
-        
-        // Populate AT options
-        const optionsAT = [];
-        const valuesAT = [];
-        for (let i = 0; i < filteredRows.length; i++) {
-          const codAtividade = filteredRows[i][codAtividadeIndex];
-          const atividade = filteredRows[i][atividadeIndex];
-          if (codAtividade === undefined && atividade === undefined) {
-            break;
-          }
-          if ((codAtividade && atividade && !optionsAT.includes(atividade)) && (codAtividade !== undefined && atividade !== undefined)) {
-            optionsAT.push(atividade);
-            valuesAT.push(codAtividade);
-          }
-        }
-        for (let i = 0; i < optionsAT.length; i++) {
-          const option = document.createElement("option");
-          option.text = optionsAT[i];
-          option.value = valuesAT[i];
-          selectAT.add(option);
-        }
 
-        // Trigger change event to populate PP options
-        selectAT.dispatchEvent(new Event('change'));
-      });
-
-      // PP
-      const selectAT = document.getElementById("AT");
-      selectAT.addEventListener('change', function() {
-        // Clear PP options
-        const selectPP = document.getElementById("PP");
-        selectPP.innerHTML = '';
-        
-        // Filter rows by selected DDD and AT values
-        const filteredRows = rows.filter(row => row[codIndex] == selectDDD.value && row[codAtividadeIndex] == this.value);
-        
-        // Populate PP options
-        const optionsPP = [];
-        const valuesPP = [];
-        for (let i = 0; i < filteredRows.length; i++) {
-          const codProduto = filteredRows[i][codProdutoIndex];
-          const produto = filteredRows[i][produtoIndex];
-          if (codProduto === undefined && produto === undefined) {
-            break;
-          }
-          if ((codProduto && produto && !optionsPP.includes(produto)) && (codProduto !== undefined && produto !== undefined)) {
-            optionsPP.push(produto);
-            valuesPP.push(codProduto);
-          }
-        }
-        for (let i = 0; i < optionsPP.length; i++) {
-          const option = document.createElement("option");
-          option.text = optionsPP[i];
-          option.value = valuesPP[i];
-          selectPP.add(option);
-        }
-      });
-      
-      // Trigger change event to populate AT and PP options
-      selectDDD.dispatchEvent(new Event('change'));
+      // Enable DDD select
+      document.getElementById("DDD").disabled = false;
       
       document.querySelector('.box').style.display = 'none';
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      console.log('AJAX request failed:', textStatus, errorThrown);
-      // código para lidar com a falha da solicitação
-    }
-  });
+    });
 });
 
-primeiraColuna.addEventListener('change', function() {
+// AT
+selectDDD.addEventListener('change', function() {
+  // Clear AT options
+  const selectAT = document.getElementById("AT");
+  selectAT.innerHTML = '';
 
-  var selectDDD = document.getElementById("DDD");
-  var selectAT = document.getElementById("AT");
-  var selectPP = document.getElementById("PP");
+  // Clear PP options
+  const selectPP = document.getElementById("PP");
+  selectPP.innerHTML = '';
 
+  // Clear YYYY options
+  const selectYYYY = document.getElementById("YYYY");
+  selectYYYY.innerHTML = '';
+
+  // Clear AA options
+  const selectAA = document.getElementById("AA");
+  selectAA.innerHTML = '';
+
+  // Clear SP options
+  const selectSP = document.getElementById("SP");
+  selectSP.innerHTML = '';
+
+  // Clear ISP options
+  const selectISP = document.getElementById("ISP");
+  selectISP.innerHTML = '';
+
+  // Disable AT select
   document.getElementById("AT").disabled = true;
+
+  // Disable PP select
   document.getElementById("PP").disabled = true;
-  document.getElementById("AA").disabled = true;
+
+  // Disable YYYY select
   document.getElementById("YYYY").disabled = true;
+
+  // Disable AA select
+  document.getElementById("AA").disabled = true;
+
+  // Disable SP select
   document.getElementById("SP").disabled = true;
-  document.getElementById("IPP").disabled = true;
 
-  AA.value = ''
-  YYYY.value = ''
-  SP.value = ''
-  IPP.value = ''
-  Array.from(selectPP.options).forEach(function(option) {
-    if (isNaN(option.value)) {
-      PP.value = option.value;
-    }
-  });
-  Array.from(selectAT.options).forEach(function(option) {
-    if (isNaN(option.value)) {
-      AT.value = option.value;
-    }
-  });
+  // Disable ISP select
+  document.getElementById("ISP").disabled = true;
 
-  if (selectDDD.value !== '') {
-    // Filter options displayed based on data-ddd of selectElement equals the DDD selected on primeiraColuna change
-    let hasMatch = false;
-    Array.from(selectAT.options).forEach(function(option) {
-      if ((option.getAttribute('data-ddd') === selectDDD.value)) {
-        option.style.display = 'block';
-        hasMatch = true;
-      } else {
-        option.style.display = 'none';
+    if (selectDDD.value !== '') {
+      // Enable AT select
+      document.getElementById("AT").disabled = false;
+      
+      // Filter rows by selected DDD value
+      const filteredRows = rows.filter(row => row.CodDemanda == this.value);
+      
+      // Populate AT options
+      const optionsAT = ['Atividade'];
+      const valuesAT = [''];
+      for (let i = 0; i < filteredRows.length; i++) {
+        const codAtividade = filteredRows[i].CodAtividade;
+        let atividade = filteredRows[i].Atividade;
+        if (codAtividade === undefined && atividade === undefined) {
+          break;
+        }
+        if (atividade === '-') {
+          atividade = '';
+        }
+        if ((codAtividade && atividade !== undefined && !optionsAT.includes(atividade)) && (codAtividade !== undefined && atividade !== undefined)) {
+          optionsAT.push(atividade);
+          valuesAT.push(codAtividade);
+        }
       }
-    });
-    if (!hasMatch) {
-      let blankOption = document.createElement('option');
-      blankOption.text = '';
-      blankOption.value = '';
-      selectAT.add(blankOption);
-    }
-    document.getElementById("AT").disabled = false;
-  } else {
+      for (let i = 0; i < optionsAT.length; i++) {
+        const option = document.createElement("option");
+        option.text = optionsAT[i];
+        option.value = valuesAT[i];
+        selectAT.add(option);
+      }
+  } else { 
+    // Clear AT options
+    const selectAT = document.getElementById("AT");
+    selectAT.innerHTML = '';
+
+    // Enable AT select
     document.getElementById("AT").disabled = true;
   }
-
 });
 
-segundaColuna.addEventListener('change', function() {
+// PP
+const selectAT = document.getElementById("AT");
+selectAT.addEventListener('change', function() {
 
-  var selectDDD = document.getElementById("DDD");
-  var selectAT = document.getElementById("AT");
-  var selectPP = document.getElementById("PP");
+  // Clear PP options
+  const selectPP = document.getElementById("PP");
+  selectPP.innerHTML = '';
 
+  // Clear YYYY options
+  const selectYYYY = document.getElementById("YYYY");
+  selectYYYY.innerHTML = '';
+
+  // Clear AA options
+  const selectAA = document.getElementById("AA");
+  selectAA.innerHTML = '';
+
+  // Clear SP options
+  const selectSP = document.getElementById("SP");
+  selectSP.innerHTML = '';
+
+  // Clear ISP options
+  const selectISP = document.getElementById("ISP");
+  selectISP.innerHTML = '';
+
+  // Disable PP select
   document.getElementById("PP").disabled = true;
-  document.getElementById("AA").disabled = true;
+
+  // Disable YYYY select
   document.getElementById("YYYY").disabled = true;
+
+  // Disable AA select
+  document.getElementById("AA").disabled = true;
+
+  // Disable SP select
   document.getElementById("SP").disabled = true;
-  document.getElementById("IPP").disabled = true;
 
-  AA.value = ''
-  YYYY.value = ''
-  SP.value = ''
-  IPP.value = ''
-  Array.from(selectPP.options).forEach(function(option) {
-    if (isNaN(option.value)) {
-      PP.value = option.value;
-    }
-  });
-
-  if (selectDDD.value !== '') {
-    // Filter options displayed based on data-ddd of selectElement equals the DDD selected on primeiraColuna change
-    let hasMatch = false;
-    Array.from(selectPP.options).forEach(function(option) {
-      if ((option.getAttribute('data-ddd') === selectDDD.value && option.getAttribute('data-at') === selectAT.value)) {
-        option.style.display = 'block';
-        hasMatch = true;
-      } else {
-        option.style.display = 'none';
-      }
-    });
-    if (!hasMatch) {
-      let blankOption = document.createElement('option');
-      blankOption.text = '';
-      blankOption.value = '';
-      selectPP.add(blankOption);
-    }
+  // Disable ISP select
+  document.getElementById("ISP").disabled = true;
+  
+  if (selectAT.value !== '' && selectDDD.value !== '') { 
+    // Enable PP select
     document.getElementById("PP").disabled = false;
+
+    // Filter rows by selected DDD and AT values
+    const filteredRows = rows.filter(row => row.CodDemanda == selectDDD.value && row.CodAtividade == this.value);
+    
+    // Populate PP options
+    const optionsPP = ['Produto'];
+    const valuesPP = [''];
+    for (let i = 0; i < filteredRows.length; i++) {
+      const codProduto = filteredRows[i].CodProduto;
+      let produto = filteredRows[i].Produto;
+      if (codProduto === undefined && produto === undefined) {
+        break;
+      }
+      if (produto === '-') {
+        produto = '';
+      }
+      if ((codProduto && produto !== undefined && !optionsPP.includes(produto)) && (codProduto !== undefined && produto !== undefined)) {
+        optionsPP.push(produto);
+        valuesPP.push(codProduto);
+      }
+    }
+
+    // Add empty option if PP would be empty
+    if (optionsPP.length === 1) {
+      optionsPP.push('');
+      valuesPP.push('');
+    }
+
+    for (let i = 0; i < optionsPP.length; i++) {
+      const option = document.createElement("option");
+      option.text = optionsPP[i];
+      option.value = valuesPP[i];
+      selectPP.add(option);
+    }
   } else {
+    // Clear PP options
+    const selectPP = document.getElementById("PP");
+    selectPP.innerHTML = '';
+  
+    // Enable PP select
     document.getElementById("PP").disabled = true;
   }
 });
@@ -275,144 +273,196 @@ terceiraColuna.addEventListener('change', function() {
   var selectAT = document.getElementById("AT");
   var selectPP = document.getElementById("PP");
 
-  var ano, acao, sprint;
+  // Clear YYYY options
+  const selectYYYY = document.getElementById("YYYY");
+  selectYYYY.innerHTML = '';
 
-  if ([1, 2, 3, 4].includes(Number(selectDDD.value))) {
-    fetch('acao.json')
-      .then(response => response.json())
-      .then(data => {
-        // Use the data here
-        acao = data;
-        // Get the select element ano
-        const selectAA = document.getElementById("AA");
+  // Clear AA options
+  const selectAA = document.getElementById("AA");
+  selectAA.innerHTML = '';
 
-        // Create and append the options to the select element
-        acao.forEach(function(item) {
-          const option = document.createElement("option");
-          option.value = item.value;
-          option.text = item.text;
-          selectAA.add(option);
-    });
-      })
-      .catch(error => {
-        // Handle errors here
-        console.error("Erro acao.json: ", error);
+  // Clear SP options
+  const selectSP = document.getElementById("SP");
+  selectSP.innerHTML = '';
+
+  // Clear ISP options
+  const selectISP = document.getElementById("ISP");
+  selectISP.innerHTML = '';
+
+  // Disable YYYY select
+  document.getElementById("YYYY").disabled = true;
+
+  // Disable AA select
+  document.getElementById("AA").disabled = true;
+
+  // Disable SP select
+  document.getElementById("SP").disabled = true;
+
+  // Disable ISP select
+  document.getElementById("ISP").disabled = true;
+
+    if (selectPP.value !== '' && selectAT.value !== '' && selectDDD.value !== '') {
+
+    var ano, acao, sprint;
+
+    if ([1, 2, 3, 4].includes(Number(selectDDD.value))) {
+
+      fetch('sprint.json')
+        .then(response => response.json())
+        .then(data => {
+          // Use the data here
+          sprint = data;
+          // Get the select element ano
+          const selectSP = document.getElementById("SP");
+
+          // Create and append the options to the select element
+          sprint.forEach(function(item) {
+            const option = document.createElement("option");
+            option.value = item.value;
+            option.text = item.text;
+            selectSP.add(option);
       });
-
-    fetch('sprint.json')
-      .then(response => response.json())
-      .then(data => {
-        // Use the data here
-        sprint = data;
-        // Get the select element ano
-        const selectSP = document.getElementById("SP");
-
-        // Create and append the options to the select element
-        sprint.forEach(function(item) {
-          const option = document.createElement("option");
-          option.value = item.value;
-          option.text = item.text;
-          selectSP.add(option);
-    });
-        
-      })
-      .catch(error => {
-        // Handle errors here
-        console.error("Erro sprint.json: ", error);
-      });
-
-    fetch('ano.json')
-      .then(response => response.json())
-      .then(data => {
-        // Use the data here
-        ano = data;
-
-        // Get the select element ano
-        const selectYYYY = document.getElementById("YYYY");
-
-        // Create and append the options to the select element
-        ano.forEach(function(item) {
-          const option = document.createElement("option");
-          option.value = item.value;
-          option.text = item.text;
-          selectYYYY.add(option);
+          
+        })
+        .catch(error => {
+          // Handle errors here
+          console.error("Erro sprint.json: ", error);
         });
-      })
-      .catch(error => {
-        // Handle errors here
-        console.error("Erro ano.json: ", error);
-      });
-    console.log("texto teste ",selectDDD.value)
-    if (selectDDD.value == 1){
-      document.getElementById("YYYY").disabled = false;
+
+      fetch('ano.json')
+        .then(response => response.json())
+        .then(data => {
+          // Use the data here
+          ano = data;
+
+          // Get the select element ano
+          const selectYYYY = document.getElementById("YYYY");
+
+          // Create and append the options to the select element
+          ano.forEach(function(item) {
+            const option = document.createElement("option");
+            option.value = item.value;
+            option.text = item.text;
+            selectYYYY.add(option);
+          });
+        })
+        .catch(error => {
+          // Handle errors here
+          console.error("Erro ano.json: ", error);
+        });
+      if (selectDDD.value == 1){
+        document.getElementById("YYYY").disabled = false;
+        document.getElementById("SP").disabled = true;
+      }
+      if ([2, 3, 4].includes(Number(selectDDD.value))){
+        document.getElementById("YYYY").disabled = false;
+        document.getElementById("SP").disabled = false;
+      }
+    } else if (selectDDD.value == 5){
+        document.getElementById("YYYY").disabled = false;
+        document.getElementById("SP").disabled = true;
+        let tasksSelect = document.getElementById("IPP");
+      fetch('ano.json')
+        .then(response => response.json())
+        .then(data => {
+          // Use the data here
+          ano = data;
+
+          // Get the select element ano
+          const selectYYYY = document.getElementById("YYYY");
+
+          // Create and append the options to the select element
+          ano.forEach(function(item) {
+            const option = document.createElement("option");
+            option.value = item.value;
+            option.text = item.text;
+            selectYYYY.add(option);
+          });
+        })
+        .catch(error => {
+          // Handle errors here
+          console.error("Erro ano.json: ", error);
+        });
+        fetch('idEaudMonitoramento.json')
+        .then(response => response.json())
+        .then(data => {
+          // Populate select element with data from JSON file
+          for (let task in data) {
+              let option = document.createElement("option");
+              option.text = task;
+              tasksSelect.add(option);
+              }
+        });
+        document.getElementById("IPP").disabled = false;
+      }
+    } else {
+      // Clear YYYY options
+      const selectYYYY = document.getElementById("YYYY");
+      selectYYYY.innerHTML = '';
+      document.getElementById("YYYY").disabled = true;
+      // Clear AA options
+      const selectAA = document.getElementById("AA");
+      selectAA.innerHTML = '';
       document.getElementById("AA").disabled = true;
+      // Clear SP options
+      const selectSP = document.getElementById("SP");
+      selectSP.innerHTML = '';
       document.getElementById("SP").disabled = true;
     }
-    if ([2, 3, 4].includes(Number(selectDDD.value))){
-      document.getElementById("YYYY").disabled = false;
-      document.getElementById("AA").disabled = false;
-      document.getElementById("SP").disabled = false;
-    }
-  } else if (selectDDD.value == 5){
-      document.getElementById("YYYY").disabled = false;
-      document.getElementById("AA").disabled = false;
-      document.getElementById("SP").disabled = true;
-      let tasksSelect = document.getElementById("IPP");
-      fetch('acao.json')
-      .then(response => response.json())
-      .then(data => {
-        // Use the data here
-        acao = data;
-        // Get the select element ano
-        const selectAA = document.getElementById("AA");
 
-        // Create and append the options to the select element
-        acao.forEach(function(item) {
-          const option = document.createElement("option");
-          option.value = item.value;
-          option.text = item.text;
-          selectAA.add(option);
+    var selectDDD = document.getElementById("DDD");
+
+    document.getElementById("ISP").disabled = true;
+
+    // Clear ISP options
+    selectISP.innerHTML = '';
+
+    // Disable ISP select
+    document.getElementById("ISP").disabled = true;
+
+    if (([2, 3, 4].includes(Number(selectDDD.value)))) {
+      document.getElementById("ISP").disabled = false;
+    } else if (selectDDD.value === 5) {
+      document.getElementById("ISP").disabled = false;
+      } else {document.getElementById("ISP").disabled = true;}
+  });
+
+anoAcao.addEventListener('change', function() {
+  // Clear YYYY options
+  const selectAA = document.getElementById("AA");
+  selectAA.innerHTML = '';
+  if ((selectAT.value == 3 || selectAT.value == 2) && selectDDD.value == 1) {
+    document.getElementById("AA").disabled = true;
+  } else {
+    fetch('acao.json')
+    .then(response => response.json())
+    .then(data => {
+      // Use the data here
+      acao = data;
+      // Get the select elements
+      const selectAA = document.getElementById("AA");
+      const selectYYYY = document.getElementById("YYYY");
+
+      // Filter acao by selected YYYY value
+      const filteredAcao = acao.filter(item => item.year == selectYYYY.value);
+
+      // Create and append the options to the AA select element
+      filteredAcao.forEach(function(item) {
+        const option = document.createElement("option");
+        option.value = item.value;
+        option.text = item.text;
+        selectAA.add(option);
+      });
+      document.getElementById("AA").disabled = false;
+    })
+    .catch(error => {
+      // Handle errors here
+      console.error("Erro acao.json: ", error);
     });
-      })
-      .catch(error => {
-        // Handle errors here
-        console.error("Erro acao.json: ", error);
-      });
-    fetch('ano.json')
-      .then(response => response.json())
-      .then(data => {
-        // Use the data here
-        ano = data;
-
-        // Get the select element ano
-        const selectYYYY = document.getElementById("YYYY");
-
-        // Create and append the options to the select element
-        ano.forEach(function(item) {
-          const option = document.createElement("option");
-          option.value = item.value;
-          option.text = item.text;
-          selectYYYY.add(option);
-        });
-      })
-      .catch(error => {
-        // Handle errors here
-        console.error("Erro ano.json: ", error);
-      });
-      fetch('idEaudMonitoramento.json')
-      .then(response => response.json())
-      .then(data => {
-        // Populate select element with data from JSON file
-        for (let task in data) {
-            let option = document.createElement("option");
-            option.text = task;
-            tasksSelect.add(option);
-            }
-      });
-      document.getElementById("IPP").disabled = false;
-    }
+  }
 });
 
+/*
 acaoColuna.addEventListener('change', function() {
   var selectAA = document.getElementById("AA");
   var selectDDD = document.getElementById("DDD");
@@ -421,82 +471,72 @@ acaoColuna.addEventListener('change', function() {
 
   document.getElementById("ISP").disabled = true;
 
+  // Clear ISP options
+  const selectISP = document.getElementById("ISP");
+  selectISP.innerHTML = '';
+
+  // Disable ISP select
+  document.getElementById("ISP").disabled = true;
+
   if (selectAA.value !== '' && ([2, 3, 4].includes(Number(selectDDD.value)))) {
-    let tasksSelect = document.getElementById("IPP");
-    fetch('idEaud.json')
-    .then(response => response.json())
-    .then(data => {
 
-      // Populate select element with data from JSON file
-      for (let task in data) {
-          let option = document.createElement("option");
-          option.text = task;
-          tasksSelect.add(option);
-          }
-    });
-    document.getElementById("IPP").disabled = false;
+    document.getElementById("ISP").disabled = false;
   } else if (selectDDD.value === 5) {
-    let tasksSelect = document.getElementById("IPP");
-    fetch('idEaudMonitoramento.json')
-    .then(response => response.json())
-    .then(data => {
-
-      // Populate select element with data from JSON file
-      for (let task in data) {
-          let option = document.createElement("option");
-          option.text = task;
-          tasksSelect.add(option);
-          }
-    });
-    document.getElementById("IPP").disabled = false;
-    } else if (selectDDD.value == 5) {document.getElementById("IPP").disabled = false;} else {document.getElementById("IPP").disabled = true;}
+    document.getElementById("ISP").disabled = false;
+    } else if (selectDDD.value == 5) {document.getElementById("ISP").disabled = false;} else {document.getElementById("IPP").disabled = true;}
 });
+*/
 
-eaudColuna.addEventListener('click', function() {
+/*
+eaudColuna.addEventListener('change', function() {
   var selectIPP = document.getElementById("IPP");
 
-  // Clear options of ISP select element
-  let ISP = document.getElementById("ISP");
-  while (ISP.options.length > 0) {
-    ISP.remove(0);
-  }
-  ISP.options.length = 0;
+  if (selectDDD != 5) {
+    // Clear options of ISP select element
+    let ISP = document.getElementById("ISP");
+    while (ISP.options.length > 0) {
+      ISP.remove(0);
+    }
+    ISP.options.length = 0;
 
-  if (selectIPP.text !== '' && selectDDD != 5) {
-    let tasksSelect = document.getElementById("IPP");
-    let subtasksSelect = document.getElementById("ISP");
+    if (selectIPP.text !== '' && selectDDD.value != 5) {
 
-    // Assign onchange property outside of fetch function
-    tasksSelect.onchange = function() {
-      subtasksSelect.options.length = 0;
-      let selectedTask = tasksSelect.options[tasksSelect.selectedIndex].text;
-      fetch('idEaud.json')
-      .then(response => response.json())
-      .then(data => {
-        // Populate select element with data from JSON file
-        for (let subtask of data[selectedTask]) {
-          // Check if option already exists
-          let optionExists = false;
-          for (let i = 0; i < subtasksSelect.options.length; i++) {
-            if (subtasksSelect.options[i].text === subtask) {
-              optionExists = true;
-              break;
+      let tasksSelect = document.getElementById("IPP");
+      let subtasksSelect = document.getElementById("ISP");
+
+      // Assign onchange property outside of fetch function
+      tasksSelect.onchange = function() {
+        subtasksSelect.options.length = 0;
+        let selectedTask = tasksSelect.options[tasksSelect.selectedIndex].text;
+        fetch('idEaud.json')
+        .then(response => response.json())
+        .then(data => {
+          // Populate select element with data from JSON file
+          for (let subtask of data[selectedTask]) {
+            // Check if option already exists
+            let optionExists = false;
+            for (let i = 0; i < subtasksSelect.options.length; i++) {
+              if (subtasksSelect.options[i].text === subtask) {
+                optionExists = true;
+                break;
+              }
+            }
+            // Add option if it doesn't already exist
+            if (!optionExists) {
+              let option = document.createElement("option");
+              option.text = subtask;
+              subtasksSelect.add(option);
             }
           }
-          // Add option if it doesn't already exist
-          if (!optionExists) {
-            let option = document.createElement("option");
-            option.text = subtask;
-            subtasksSelect.add(option);
-          }
-        }
-      });
-    }
+        });
+      }
 
-    tasksSelect.onchange();
-    document.getElementById("ISP").disabled = false;
-  } else {document.getElementById("ISP").disabled = true;}
+      tasksSelect.onchange();
+      document.getElementById("ISP").disabled = false;
+    } else {document.getElementById("ISP").disabled = true;}
+  } else { document.getElementById("ISP").disabled = true;}
 });
+*/
 
 /*
 // Adiciona um evento de mudança de valor 
