@@ -603,22 +603,57 @@ apagar.addEventListener("click", event => {
   DDD.value = ''
   AT.value = ''
   SP.value = ''
-  IPP.value = ''
   ISP.value = ''
   Ret.value = ''
   AT.text = 'Atividade'
   PP.text = 'Produto'
+  // Clear AT options
+  const selectAT = document.getElementById("AT");
+  selectAT.innerHTML = '';
 
-  // Clear options of select elements
-  YYYY.options.length = 0;
-  AA.options.length = 0;
-  SP.options.length = 0;
-  IPP.options.length = 0;
-  ISP.options.length = 0;
+  // Clear PP options
+  const selectPP = document.getElementById("PP");
+  selectPP.innerHTML = '';
+
+  // Clear YYYY options
+  const selectYYYY = document.getElementById("YYYY");
+  selectYYYY.innerHTML = '';
+
+  // Clear AA options
+  const selectAA = document.getElementById("AA");
+  selectAA.innerHTML = '';
+
+  // Clear SP options
+  const selectSP = document.getElementById("SP");
+  selectSP.innerHTML = '';
+
+  // Clear ISP options
+  const selectISP = document.getElementById("ISP");
+  selectISP.innerHTML = '';
+
+  // Disable AT select
+  document.getElementById("AT").disabled = true;
+
+  // Disable PP select
+  document.getElementById("PP").disabled = true;
+
+  // Disable YYYY select
+  document.getElementById("YYYY").disabled = true;
+
+  // Disable AA select
+  document.getElementById("AA").disabled = true;
+
+  // Disable SP select
+  document.getElementById("SP").disabled = true;
+
+  // Disable ISP select
+  document.getElementById("ISP").disabled = true;
+
 
   // Desabilita o elemento select
   const selects = document.querySelectorAll("select");
   selects.forEach(select => select.disabled = true);
+  document.getElementById("ISP").disabled = true;
   document.getElementById("DDD").disabled = false;
 });
 
