@@ -72,10 +72,11 @@ window.addEventListener('load', function() {
       const valuesDDD = [''];
       for (let i = 0; i < rows.length; i++) {
         const cod = rows[i].CodDemanda;
-        const tipo = rows[i]['Tipo de Demanda'];
+        let tipo = rows[i]['Tipo de Demanda'];
         if (cod === undefined || tipo === undefined) {
           break;
         }
+        tipo = fixText(tipo);
         if (cod && tipo && !optionsDDD.includes(tipo)) {
           optionsDDD.push(tipo);
           valuesDDD.push(cod);
@@ -86,7 +87,7 @@ window.addEventListener('load', function() {
         const option = document.createElement("option");
         option.text = optionsDDD[i];
         option.value = valuesDDD[i];
-        if (isNaN(option.value)){option.value = '';}
+        if (isNaN(option.value)) { option.value = ''; }
         selectDDD.add(option);
       }
 
@@ -616,4 +617,28 @@ function copiarResultado() {
 
    Ret.select();
    navigator.clipboard.writeText(Ret.value); 
+}
+
+function fixText(text) {
+  // Define a dictionary of special characters to replace
+  const replacements = {
+    'Ã¡': 'á',
+    'Ã¢': 'â',
+    'Ã£': 'ã',
+    'Ã©': 'é',
+    'Ãª': 'ê',
+    'Ã­': 'í',
+    'Ã³': 'ó',
+    'Ã´': 'ô',
+    'Ãµ': 'õ',
+    'Ãº': 'ú',
+    'Ã§': 'ç'
+  };
+
+  // Replace any occurrences of special characters in the text
+  for (const [old, newChar] of Object.entries(replacements)) {
+    text = text.split(old).join(newChar);
+  }
+
+  return text;
 }
