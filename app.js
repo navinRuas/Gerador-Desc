@@ -142,7 +142,7 @@ selectDDD.addEventListener('change', function() {
   // Disable ISP select
   document.getElementById("ISP").disabled = true;
 
-  if (selectDDD.value !== '') {
+  if (selectDDD.value !== '' && ![12, 13, 14].includes(selectDDD)) {
     // Enable AT select
     document.getElementById("AT").disabled = false;
 
@@ -161,6 +161,9 @@ selectDDD.addEventListener('change', function() {
       if (atividade === '-') {
         atividade = '';
       }
+      if (codAtividade === '-') {
+        codAtividade = '';
+      }
       if ((codAtividade && atividade !== undefined && !optionsAT.includes(atividade)) && (codAtividade !== undefined && atividade !== undefined)) {
         optionsAT.push(atividade);
         valuesAT.push(codAtividade);
@@ -177,6 +180,30 @@ selectDDD.addEventListener('change', function() {
       option.value = sortedOptions[i].value;
       selectAT.add(option);
     }
+  } else if ([12, 13, 14].includes(selectDDD)) {
+
+    fetch('ano.json')
+      .then(response => response.json())
+      .then(data => {
+        // Use the data here
+        ano = data;
+
+        // Get the select element ano
+        const selectYYYY = document.getElementById("YYYY");
+
+        // Create and append the options to the select element
+        ano.forEach(function(item) {
+          const option = document.createElement("option");
+          option.value = item.value;
+          option.text = item.text;
+          selectYYYY.add(option);
+        });
+      })
+      .catch(error => {
+        // Handle errors here
+        console.error("Erro ano.json: ", error);
+      });
+      document.getElementById("YYY").disabled = false;
   } else {
     // Clear AT options
     const selectAT = document.getElementById("AT");
@@ -244,6 +271,9 @@ selectAT.addEventListener('change', function() {
       }
       if (produto === '-') {
         produto = '';
+      }
+      if (codProduto === '-') {
+        codProduto = '';
       }
       if ((codProduto && produto !== undefined && !optionsPP.includes(produto)) && (codProduto !== undefined && produto !== undefined)) {
         optionsPP.push(produto);
