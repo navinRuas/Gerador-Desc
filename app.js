@@ -254,7 +254,37 @@ selectAT.addEventListener('change', function() {
   // Disable ISP select
   document.getElementById("ISP").disabled = true;
 
-  if (selectAT.value !== '' && selectDDD.value !== '') {
+  if (selectDDD.value == 6 || selectDDD.value == 10 || selectDDD.value == 8 && selectAT.value == 1 || (selectDDD.value == 9 && [4, 5, 6].includes(Number(selectAT.value)))) {
+      var ano, acao, sprint;
+
+        fetch('ano.json')
+          .then(response => response.json())
+          .then(data => {
+            // Use the data here
+            ano = data;
+
+            // Get the select element ano
+            const selectYYYY = document.getElementById("YYYY");
+
+            // Create and append the options to the select element
+            ano.forEach(function(item) {
+              const option = document.createElement("option");
+              option.value = item.value;
+              option.text = item.text;
+              selectYYYY.add(option);
+            });
+          })
+          .catch(error => {
+            // Handle errors here
+            console.error("Erro ano.json: ", error);
+          });
+        document.getElementById("YYYY").disabled = false;
+        document.getElementById("SP").disabled = true;
+        document.getElementById("AA").disabled = true;
+        document.getElementById("ISP").disabled = true;
+      }
+  
+  if ((selectAT.value !== '' && selectDDD.value !== '') && !(selectDDD.value == 6 || selectDDD.value == 10 || selectDDD.value == 8 && selectAT.value == 1 || (selectDDD.value == 9 && [4, 5, 6].includes(Number(selectAT.value))))) {
     // Enable PP select
     document.getElementById("PP").disabled = false;
 
@@ -473,6 +503,7 @@ anoAcao.addEventListener('change', function() {
   // Clear YYYY options
   const selectAA = document.getElementById("AA");
   selectAA.innerHTML = '';
+  if (!(selectDDD.value == 6 || selectDDD.value == 10 || selectDDD.value == 8 && selectAT.value == 1 || (selectDDD.value == 9 && [4, 5, 6].includes(Number(selectAT.value))))){
   if ((selectAT.value == 3 || selectAT.value == 2) && selectDDD.value == 1) {
     document.getElementById("AA").disabled = true;
   } else {
@@ -504,6 +535,7 @@ anoAcao.addEventListener('change', function() {
       });
     }
   }
+}
 });
 
 /*
