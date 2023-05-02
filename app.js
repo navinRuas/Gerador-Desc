@@ -142,7 +142,8 @@ selectDDD.addEventListener('change', function() {
   // Disable ISP select
   document.getElementById("ISP").disabled = true;
 
-  if (selectDDD.value !== '' && ![12, 13, 14].includes(selectDDD)) {
+  if (selectDDD.value != '' && (![12, 13, 14].includes(Number(selectDDD.value)))) {
+    console.log('DDD selecionado: ' + selectDDD.value);
     // Enable AT select
     document.getElementById("AT").disabled = false;
 
@@ -180,7 +181,7 @@ selectDDD.addEventListener('change', function() {
       option.value = sortedOptions[i].value;
       selectAT.add(option);
     }
-  } else if ([12, 13, 14].includes(selectDDD)) {
+  } else if ([12, 13, 14].includes(Number(selectDDD.value))) {
 
     fetch('ano.json')
       .then(response => response.json())
@@ -203,7 +204,7 @@ selectDDD.addEventListener('change', function() {
         // Handle errors here
         console.error("Erro ano.json: ", error);
       });
-      document.getElementById("YYY").disabled = false;
+      document.getElementById("YYYY").disabled = false;
   } else {
     // Clear AT options
     const selectAT = document.getElementById("AT");
@@ -475,6 +476,7 @@ anoAcao.addEventListener('change', function() {
   if ((selectAT.value == 3 || selectAT.value == 2) && selectDDD.value == 1) {
     document.getElementById("AA").disabled = true;
   } else {
+    if (![12, 13, 14].includes(Number(selectDDD.value))) {
     fetch('acao.json')
       .then(response => response.json())
       .then(data => {
@@ -500,6 +502,7 @@ anoAcao.addEventListener('change', function() {
         // Handle errors here
         console.error("Erro acao.json: ", error);
       });
+    }
   }
 });
 
