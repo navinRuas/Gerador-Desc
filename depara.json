@@ -640,22 +640,6 @@
     "Produto 2": ""
   },
   {
-    "CodDemanda": 6,
-    "Tipo de Demanda": "Demandas Extraordinárias",
-    "-": "-",
-    "CodAtividade": "-",
-    "Atividade": "-",
-    "-__1": "-",
-    "CodProduto": "-",
-    "Produto": "-",
-    "-__2": "-",
-    "Atividade 2": "Atv",
-    "nº da atividade": 5,
-    "-__3": "-",
-    "Atividade PGD": "Atendimento de demandas de unidades e usuários internos e externos",
-    "Produto 2": ""
-  },
-  {
     "CodDemanda": 7,
     "Tipo de Demanda": "PGMQ",
     "-": "-",
@@ -977,6 +961,22 @@
   },
   {
     "CodDemanda": 13,
+    "Tipo de Demanda": "Demandas Extraordinárias",
+    "-": "-",
+    "CodAtividade": "-",
+    "Atividade": "-",
+    "-__1": "-",
+    "CodProduto": "-",
+    "Produto": "-",
+    "-__2": "-",
+    "Atividade 2": "Atv",
+    "nº da atividade": 5,
+    "-__3": "-",
+    "Atividade PGD": "Atendimento de demandas de unidades e usuários internos e externos",
+    "Produto 2": ""
+  },
+  {
+    "CodDemanda": 14,
     "Tipo de Demanda": "Outros",
     "-": "-",
     "CodAtividade": "-",
