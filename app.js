@@ -44,20 +44,14 @@ const ISP = document.getElementById('ISP')
 const enviar = document.getElementById('gerar');
 const apagar = document.getElementById('reset');
 const Ret = document.getElementById('Ret');
+const AAP = document.getElementById('AAP');
 
-var primeiraColuna = document.getElementById('DDD');
-var segundaColuna = document.getElementById('AT');
-var terceiraColuna = document.getElementById('PP');
-var anoAcao = document.getElementById('YYYY');
-var acaoColuna = document.getElementById('AA');
+let rows;
 
 // Desabilita o elemento select
 const selects = document.querySelectorAll("select");
 selects.forEach(select => select.disabled = true);
 document.getElementById("ISP").disabled = true;
-
-let rows;
-const selectDDD = document.getElementById("DDD");
 
 window.addEventListener('load', function() {
   document.querySelector('.box').style.display = 'flex';
@@ -67,39 +61,118 @@ window.addEventListener('load', function() {
       console.log(data); // Log the response from the server
       rows = data;
 
-      // DDD
-      const optionsDDD = ['Tipo de Demanda'];
-      const valuesDDD = [''];
+      // AAP
+      const AAP = document.getElementById("AAP");
+      const optionsAAP = ['Atividade PGD'];
+      const valuesAAP = [''];
       for (let i = 0; i < rows.length; i++) {
-        const cod = rows[i].CodDemanda;
-        let tipo = rows[i]['Tipo de Demanda'];
-        if (cod === undefined || tipo === undefined) {
+        const numAtividade = rows[i]['nº da atividade'];
+        let atividadePGD = rows[i]['Atividade PGD'];
+        if (numAtividade === undefined || atividadePGD === undefined) {
           break;
         }
-        tipo = fixText(tipo);
-        if (cod && tipo && !optionsDDD.includes(tipo)) {
-          optionsDDD.push(tipo);
-          valuesDDD.push(cod);
+        atividadePGD = fixText(atividadePGD);
+        if (numAtividade && atividadePGD && !optionsAAP.includes(atividadePGD)) {
+          optionsAAP.push(atividadePGD);
+          valuesAAP.push(numAtividade);
         }
       }
-      const selectDDD = document.getElementById("DDD");
-      for (let i = 0; i < optionsDDD.length; i++) {
+      for (let i = 0; i < optionsAAP.length; i++) {
         const option = document.createElement("option");
-        option.text = optionsDDD[i];
-        option.value = valuesDDD[i];
+        option.text = optionsAAP[i];
+        option.value = valuesAAP[i];
         if (isNaN(option.value)) { option.value = ''; }
-        selectDDD.add(option);
+        AAP.add(option);
       }
 
-      // Enable DDD select
-      document.getElementById("DDD").disabled = false;
+      // Enable AAP select
+      document.getElementById("AAP").disabled = false;
+      document.querySelector('.box').style.display = 'none';
+
+      // DDD
+      const DDD = document.getElementById("DDD");
+      AAP.addEventListener('change', function() {
+        // Clear DDD options
+        DDD.innerHTML = '';
+
+        // Filter rows based on selected AAP value
+        const selectedNumAtividade = AAP.value;
+        const filteredRows = rows.filter(row => row['nº da atividade'] === selectedNumAtividade);
+
+        // Populate DDD options
+        const optionsDDD = ['Tipo de Demanda'];
+        const valuesDDD = [''];
+        for (let i = 0; i < filteredRows.length; i++) {
+          const codDemanda = filteredRows[i].CodDemanda;
+          let tipoDemanda = filteredRows[i]['Tipo de Demanda'];
+          if (codDemanda === undefined || tipoDemanda === undefined) {
+            break;
+          }
+          tipoDemanda = fixText(tipoDemanda);
+          if (codDemanda && tipoDemanda && !optionsDDD.includes(tipoDemanda)) {
+            optionsDDD.push(tipoDemanda);
+            valuesDDD.push(codDemanda);
+          }
+        }
+        for (let i = 0; i < optionsDDD.length; i++) {
+          const option = document.createElement("option");
+          option.text = optionsDDD[i];
+          option.value = valuesDDD[i];
+          if (isNaN(option.value)) { option.value = ''; }
+          DDD.add(option);
+        }
+
+        // Enable DDD select
+        document.getElementById("DDD").disabled = false;
+      });
 
       document.querySelector('.box').style.display = 'none';
     });
 });
 
+AAP.addEventListener('change', function() {  
+  // Clear DDD options
+  DDD.innerHTML = '';
+
+  // Clear AT options
+  AT.innerHTML = '';
+
+  // Clear PP options
+  PP.innerHTML = '';
+
+  // Clear YYYY options
+  YYYY.innerHTML = '';
+
+  // Clear AA options
+  AA.innerHTML = '';
+
+  // Clear SP options
+  SP.innerHTML = '';
+
+  // Clear ISP options
+  ISP.innerHTML = '';
+
+  // Disable AT select
+  document.getElementById("AT").disabled = true;
+
+  // Disable PP select
+  document.getElementById("PP").disabled = true;
+
+  // Disable YYYY select
+  document.getElementById("YYYY").disabled = true;
+
+  // Disable AA select
+  document.getElementById("AA").disabled = true;
+
+  // Disable SP select
+  document.getElementById("SP").disabled = true;
+
+  // Disable ISP select
+  document.getElementById("ISP").disabled = true;
+});
+
 // AT
-selectDDD.addEventListener('change', function() {
+DDD.addEventListener('change', function() {
   // Clear AT options
   const selectAT = document.getElementById("AT");
   selectAT.innerHTML = '';
@@ -142,8 +215,7 @@ selectDDD.addEventListener('change', function() {
   // Disable ISP select
   document.getElementById("ISP").disabled = true;
 
-  if (selectDDD.value != '' && (![12, 13, 14].includes(Number(selectDDD.value)))) {
-    console.log('DDD selecionado: ' + selectDDD.value);
+  if (DDD.value != '' && (![12, 13, 14].includes(Number(DDD.value)))) {
     // Enable AT select
     document.getElementById("AT").disabled = false;
 
@@ -181,7 +253,7 @@ selectDDD.addEventListener('change', function() {
       option.value = sortedOptions[i].value;
       selectAT.add(option);
     }
-  } else if ([12, 13, 14].includes(Number(selectDDD.value))) {
+  } else if ([12, 13, 14].includes(Number(DDD.value))) {
 
     fetch('ano.json')
       .then(response => response.json())
@@ -216,8 +288,7 @@ selectDDD.addEventListener('change', function() {
 });
 
 // PP
-const selectAT = document.getElementById("AT");
-selectAT.addEventListener('change', function() {
+AT.addEventListener('change', function() {
 
   // Clear PP options
   const selectPP = document.getElementById("PP");
@@ -254,7 +325,7 @@ selectAT.addEventListener('change', function() {
   // Disable ISP select
   document.getElementById("ISP").disabled = true;
 
-  if (selectDDD.value == 6 || selectDDD.value == 10 || selectDDD.value == 8 && selectAT.value == 1 || (selectDDD.value == 9 && [4, 5, 6].includes(Number(selectAT.value)))) {
+  if (DDD.value == 6 || DDD.value == 10 || DDD.value == 8 && selectAT.value == 1 || (DDD.value == 9 && [4, 5, 6].includes(Number(selectAT.value)))) {
       var ano, acao, sprint;
 
         fetch('ano.json')
@@ -284,12 +355,12 @@ selectAT.addEventListener('change', function() {
         document.getElementById("ISP").disabled = true;
       }
   
-  if ((selectAT.value !== '' && selectDDD.value !== '') && !(selectDDD.value == 6 || selectDDD.value == 10 || selectDDD.value == 8 && selectAT.value == 1 || (selectDDD.value == 9 && [4, 5, 6].includes(Number(selectAT.value))))) {
+  if ((selectAT.value !== '' && DDD.value !== '') && !(DDD.value == 6 || DDD.value == 10 || DDD.value == 8 && selectAT.value == 1 || (DDD.value == 9 && [4, 5, 6].includes(Number(selectAT.value))))) {
     // Enable PP select
     document.getElementById("PP").disabled = false;
 
     // Filter rows by selected DDD and AT values
-    const filteredRows = rows.filter(row => row.CodDemanda == selectDDD.value && row.CodAtividade == this.value);
+    const filteredRows = rows.filter(row => row.CodDemanda == DDD.value && row.CodAtividade == this.value);
 
     // Populate PP options
     const optionsPP = ['Produto'];
@@ -339,9 +410,8 @@ selectAT.addEventListener('change', function() {
   }
 });
 
-terceiraColuna.addEventListener('change', function() {
+PP.addEventListener('change', function() {
 
-  var selectDDD = document.getElementById("DDD");
   var selectAT = document.getElementById("AT");
   var selectPP = document.getElementById("PP");
 
@@ -373,11 +443,11 @@ terceiraColuna.addEventListener('change', function() {
   // Disable ISP select
   document.getElementById("ISP").disabled = true;
 
-  if (selectPP.value !== '' && selectAT.value !== '' && selectDDD.value !== '') {
+  if (selectPP.value !== '' && selectAT.value !== '' && DDD.value !== '') {
 
     var ano, acao, sprint;
 
-    if ([1, 2, 3, 4].includes(Number(selectDDD.value))) {
+    if ([1, 2, 3, 4].includes(Number(DDD.value))) {
 
       fetch('sprint.json')
         .then(response => response.json())
@@ -422,15 +492,15 @@ terceiraColuna.addEventListener('change', function() {
           // Handle errors here
           console.error("Erro ano.json: ", error);
         });
-      if (selectDDD.value == 1) {
+      if (DDD.value == 1) {
         document.getElementById("YYYY").disabled = false;
         document.getElementById("SP").disabled = true;
       }
-      if ([2, 3, 4].includes(Number(selectDDD.value))) {
+      if ([2, 3, 4].includes(Number(DDD.value))) {
         document.getElementById("YYYY").disabled = false;
         document.getElementById("SP").disabled = false;
       }
-    } else if (selectDDD.value == 5) {
+    } else if (DDD.value == 5) {
       document.getElementById("YYYY").disabled = false;
       document.getElementById("SP").disabled = true;
       let tasksSelect = document.getElementById("IPP");
@@ -482,8 +552,6 @@ terceiraColuna.addEventListener('change', function() {
     document.getElementById("SP").disabled = true;
   }
 
-  var selectDDD = document.getElementById("DDD");
-
   document.getElementById("ISP").disabled = true;
 
   // Clear ISP options
@@ -492,22 +560,22 @@ terceiraColuna.addEventListener('change', function() {
   // Disable ISP select
   document.getElementById("ISP").disabled = true;
 
-  if (([2, 3, 4].includes(Number(selectDDD.value)))) {
+  if (([2, 3, 4].includes(Number(DDD.value)))) {
     document.getElementById("ISP").disabled = false;
-  } else if (selectDDD.value === 5) {
+  } else if (DDD.value === 5) {
     document.getElementById("ISP").disabled = false;
   } else { document.getElementById("ISP").disabled = true; }
 });
 
-anoAcao.addEventListener('change', function() {
+YYYY.addEventListener('change', function() {
   // Clear YYYY options
   const selectAA = document.getElementById("AA");
   selectAA.innerHTML = '';
-  if (!(selectDDD.value == 6 || selectDDD.value == 10 || selectDDD.value == 8 && selectAT.value == 1 || (selectDDD.value == 9 && [4, 5, 6].includes(Number(selectAT.value))))){
-  if ((selectAT.value == 3 || selectAT.value == 2) && selectDDD.value == 1) {
+  if (!(DDD.value == 6 || DDD.value == 10 || DDD.value == 8 && selectAT.value == 1 || (DDD.value == 9 && [4, 5, 6].includes(Number(selectAT.value))))){
+  if ((selectAT.value == 3 || selectAT.value == 2) && DDD.value == 1) {
     document.getElementById("AA").disabled = true;
   } else {
-    if (![12, 13, 14].includes(Number(selectDDD.value))) {
+    if (![12, 13, 14].includes(Number(DDD.value))) {
     fetch('acao.json')
       .then(response => response.json())
       .then(data => {
@@ -537,118 +605,6 @@ anoAcao.addEventListener('change', function() {
   }
 }
 });
-
-/*
-acaoColuna.addEventListener('change', function() {
-  var selectAA = document.getElementById("AA");
-  var selectDDD = document.getElementById("DDD");
-
-  ISP.options.length = 0;
-
-  document.getElementById("ISP").disabled = true;
-
-  // Clear ISP options
-  const selectISP = document.getElementById("ISP");
-  selectISP.innerHTML = '';
-
-  // Disable ISP select
-  document.getElementById("ISP").disabled = true;
-
-  if (selectAA.value !== '' && ([2, 3, 4].includes(Number(selectDDD.value)))) {
-
-    document.getElementById("ISP").disabled = false;
-  } else if (selectDDD.value === 5) {
-    document.getElementById("ISP").disabled = false;
-    } else if (selectDDD.value == 5) {document.getElementById("ISP").disabled = false;} else {document.getElementById("IPP").disabled = true;}
-});
-*/
-
-/*
-eaudColuna.addEventListener('change', function() {
-  var selectIPP = document.getElementById("IPP");
-
-  if (selectDDD != 5) {
-    // Clear options of ISP select element
-    let ISP = document.getElementById("ISP");
-    while (ISP.options.length > 0) {
-      ISP.remove(0);
-    }
-    ISP.options.length = 0;
-
-    if (selectIPP.text !== '' && selectDDD.value != 5) {
-
-      let tasksSelect = document.getElementById("IPP");
-      let subtasksSelect = document.getElementById("ISP");
-
-      // Assign onchange property outside of fetch function
-      tasksSelect.onchange = function() {
-        subtasksSelect.options.length = 0;
-        let selectedTask = tasksSelect.options[tasksSelect.selectedIndex].text;
-        fetch('idEaud.json')
-        .then(response => response.json())
-        .then(data => {
-          // Populate select element with data from JSON file
-          for (let subtask of data[selectedTask]) {
-            // Check if option already exists
-            let optionExists = false;
-            for (let i = 0; i < subtasksSelect.options.length; i++) {
-              if (subtasksSelect.options[i].text === subtask) {
-                optionExists = true;
-                break;
-              }
-            }
-            // Add option if it doesn't already exist
-            if (!optionExists) {
-              let option = document.createElement("option");
-              option.text = subtask;
-              subtasksSelect.add(option);
-            }
-          }
-        });
-      }
-
-      tasksSelect.onchange();
-      document.getElementById("ISP").disabled = false;
-    } else {document.getElementById("ISP").disabled = true;}
-  } else { document.getElementById("ISP").disabled = true;}
-});
-*/
-
-/*
-// Adiciona um evento de mudança de valor 
-IPP.addEventListener('change', function() { 
-  // Obtém o valor do input 
-  var valor = IPP.value;
-  // Verifica se o valor é um número e tem menos de 7 dígitos 
-  if (isNaN(valor) === false && valor.length < 7) { 
-    // Mostra um alerta 
-    alert("O número tem menos de 7 dígitos"); 
-  }
-});
-*/
-
-/*
-IPP.addEventListener('input', function() {
-  if (this.value.length > 7) {
-    this.value = this.value.slice(0, 7);
-  }
-});
-*/
-
-/*
-YYYY.addEventListener('change', ()=> {
-   let arr = []
-   let str = ''
-   
-   possibilidades.forEach(element => {
-      if(element.ano == YYYY.value || element.ano == '') arr.push(element)
-   });
-
-   arr.map(item => str += `<option value="${item.value}">${item.text}</option>`)
-
-   AA.innerHTML = str
-});
-*/
 
 // Adiciona um evento de clique 
 enviar.addEventListener("click", function(event) { // Previne o comportamento padrão do botão 
