@@ -34,27 +34,24 @@
 ───────────────███
 */
 
-const elements = {
-  YYYY: document.getElementById('YYYY'),
-  AA: document.getElementById('AA'),
-  PP: document.getElementById('PP'),
-  AT: document.getElementById('AT'),
-  DDD: document.getElementById('DDD'),
-  SP: document.getElementById('SP'),
-  ISP: document.getElementById('ISP'),
-  AAP: document.getElementById('AAP'),
-  enviar: document.getElementById('gerar'),
-  apagar: document.getElementById('reset'),
-  Ret: document.getElementById('Ret')
-};
+const YYYY = document.getElementById('YYYY');
+const AA = document.getElementById('AA');
+const PP = document.getElementById('PP');
+const AT = document.getElementById('AT');
+const DDD = document.getElementById('DDD');
+const SP = document.getElementById('SP');
+const ISP = document.getElementById('ISP')
+const enviar = document.getElementById('gerar');
+const apagar = document.getElementById('reset');
+const Ret = document.getElementById('Ret');
+const AAP = document.getElementById('AAP');
+
+let rows;
 
 // Desabilita o elemento select
 const selects = document.querySelectorAll("select");
 selects.forEach(select => select.disabled = true);
 document.getElementById("ISP").disabled = true;
-
-let rows;
-const selectDDD = document.getElementById("DDD");
 
 window.addEventListener('load', function() {
   document.querySelector('.box').style.display = 'flex';
@@ -64,48 +61,96 @@ window.addEventListener('load', function() {
       console.log(data); // Log the response from the server
       rows = data;
 
-      // DDD
-      const optionsDDD = ['Tipo de Demanda'];
-      const valuesDDD = [''];
+      const optionsAAP = ['Atividade PGD'];
+      const valuesAAP = [''];
       for (let i = 0; i < rows.length; i++) {
-        const cod = rows[i].CodDemanda;
-        let tipo = rows[i]['Tipo de Demanda'];
-        if (cod === undefined || tipo === undefined) {
+        const numAtividade = rows[i]['nº da atividade'];
+        let atividadePGD = rows[i]['Atividade PGD'];
+        let atividade2 = rows[i]['Atividade2'];
+        if (numAtividade === undefined || atividadePGD === undefined) {
           break;
         }
-        tipo = fixText(tipo);
-        if (cod && tipo && !optionsDDD.includes(tipo)) {
-          optionsDDD.push(tipo);
-          valuesDDD.push(cod);
+        atividadePGD = fixText(atividadePGD);
+        const numAtividadeFormatted = numAtividade.toString().padStart(2, '0');
+        const optionText = `${atividade2.toUpperCase()}-${numAtividadeFormatted} ${atividadePGD}`;
+        if (numAtividade && atividadePGD && !optionsAAP.includes(optionText)) {
+          optionsAAP.push(optionText);
+          valuesAAP.push(numAtividade);
         }
       }
-      const selectDDD = document.getElementById("DDD");
-      for (let i = 0; i < optionsDDD.length; i++) {
+      for (let i = 0; i < optionsAAP.length; i++) {
         const option = document.createElement("option");
-        option.text = optionsDDD[i];
-        option.value = valuesDDD[i];
+        option.text = optionsAAP[i];
+        option.value = valuesAAP[i];
         if (isNaN(option.value)) { option.value = ''; }
-        selectDDD.add(option);
+        AAP.add(option);
       }
 
-      // Enable DDD select
-      document.getElementById("DDD").disabled = false;
+      // Enable AAP select
+      document.getElementById("AAP").disabled = false;
+      document.querySelector('.box').style.display = 'none';
+      
+      AAP.addEventListener('change', function() {
+        // Clear DDD options
+        DDD.innerHTML = '';
+
+        // Filter rows based on selected AAP value
+        const selectedNumAtividade = AAP.value;
+        const filteredRows = rows.filter(row => row['nº da atividade'] === selectedNumAtividade);
+
+        // Populate DDD options
+        const optionsDDD = ['Tipo de Demanda'];
+        const valuesDDD = [''];
+        for (let i = 0; i < filteredRows.length; i++) {
+          const codDemanda = filteredRows[i].CodDemanda;
+          let tipoDemanda = filteredRows[i]['Tipo de Demanda'];
+          if (codDemanda === undefined || tipoDemanda === undefined) {
+            break;
+          }
+          tipoDemanda = fixText(tipoDemanda);
+          if (codDemanda && tipoDemanda && !optionsDDD.includes(tipoDemanda)) {
+            optionsDDD.push(tipoDemanda);
+            valuesDDD.push(codDemanda);
+          }
+        }
+        for (let i = 0; i < optionsDDD.length; i++) {
+          const option = document.createElement("option");
+          option.text = optionsDDD[i];
+          option.value = valuesDDD[i];
+          if (isNaN(option.value)) { option.value = ''; }
+          DDD.add(option);
+        }
+
+        // Enable DDD select
+        document.getElementById("DDD").disabled = false;
+      });
 
       document.querySelector('.box').style.display = 'none';
     });
 });
 
-// AT
-selectDDD.addEventListener('change', function() {
-  clearSelectOptionsAndDisable("AT");
-  clearSelectOptionsAndDisable("PP");
-  clearSelectOptionsAndDisable("YYYY");
-  clearSelectOptionsAndDisable("AA");
-  clearSelectOptionsAndDisable("SP");
-  clearSelectOptionsAndDisable("ISP");
+AAP.addEventListener('change', function() {  
+  clearElement(DDD);
+  clearElement(AT);
+  clearElement(PP);
+  clearElement(YYYY);
+  clearElement(AA);
+  clearElement(SP);
+  clearElement(ISP);
+});
 
-  if (selectDDD.value != '' && (![12, 13, 14].includes(Number(selectDDD.value)))) {
-    console.log('DDD selecionado: ' + selectDDD.value);
+// AT
+DDD.addEventListener('change', function() {
+
+  clearElement(AT);
+  clearElement(PP);
+  clearElement(YYYY);
+  clearElement(AA);
+  clearElement(SP);
+  clearElement(ISP);
+
+  if (DDD.value != '' && (![12, 13, 14].includes(Number(DDD.value)))) {
+    
     // Enable AT select
     document.getElementById("AT").disabled = false;
 
@@ -136,45 +181,81 @@ selectDDD.addEventListener('change', function() {
     const sortedOptions = optionsAT.map((option, index) => ({ text: option, value: valuesAT[index] }))
       .sort((a, b) => a.value - b.value);
 
-    // Add sorted options to selectAT
+    // Add sorted options to AT
     for (let i = 0; i < sortedOptions.length; i++) {
       const option = document.createElement("option");
       option.text = sortedOptions[i].text;
       option.value = sortedOptions[i].value;
-      selectAT.add(option);
+      AT.add(option);
     }
-  } else if ([12, 13, 14].includes(Number(selectDDD.value))) {
+  } else if ([12, 13, 14].includes(Number(DDD.value))) {
 
-    fetchJsonAndPopulateSelectOptions('ano.json', 'YYYY');
-    document.getElementById("YYYY").disabled = false;
+    fetch('ano.json')
+      .then(response => response.json())
+      .then(data => {
+        // Use the data here
+        ano = data;
+        
+        // Create and append the options to the select element
+        ano.forEach(function(item) {
+          const option = document.createElement("option");
+          option.value = item.value;
+          option.text = item.text;
+          YYYY.add(option);
+        });
+      })
+      .catch(error => {
+        // Handle errors here
+        console.error("Erro ano.json: ", error);
+      });
+      document.getElementById("YYYY").disabled = false;
   } else {
-    clearSelectOptionsAndDisable("AT");
+    clearElement(AT);
   }
 });
 
 // PP
-const selectAT = document.getElementById("AT");
-selectAT.addEventListener('change', function() {
-  clearSelectOptionsAndDisable("PP");
-  clearSelectOptionsAndDisable("YYYY");
-  clearSelectOptionsAndDisable("AA");
-  clearSelectOptionsAndDisable("SP");
-  clearSelectOptionsAndDisable("ISP");
+AT.addEventListener('change', function() {
 
-  if (shouldFetchAnoJson(selectDDD.value, selectAT.value)) {
-    fetchJsonAndPopulateSelectOptions('ano.json', 'YYYY');
-    document.getElementById("YYYY").disabled = false;
-    document.getElementById("SP").disabled = true;
-    document.getElementById("AA").disabled = true;
-    document.getElementById("ISP").disabled = true;
-  }
+  clearElement(PP);
+  clearElement(YYYY);
+  clearElement(AA);
+  clearElement(SP);
+  clearElement(ISP);
 
-  if ((selectAT.value !== '' && selectDDD.value !== '') && !shouldFetchAnoJson(selectDDD.value, selectAT.value)) {
+  if (DDD.value == 6 || DDD.value == 10 || DDD.value == 8 && AT.value == 1 || (DDD.value == 9 && [4, 5, 6].includes(Number(AT.value)))) {
+      var ano, acao, sprint;
+
+        fetch('ano.json')
+          .then(response => response.json())
+          .then(data => {
+            // Use the data here
+            ano = data;
+
+            // Create and append the options to the select element
+            ano.forEach(function(item) {
+              const option = document.createElement("option");
+              option.value = item.value;
+              option.text = item.text;
+              YYYY.add(option);
+            });
+          })
+          .catch(error => {
+            // Handle errors here
+            console.error("Erro ano.json: ", error);
+          });
+        document.getElementById("YYYY").disabled = false;
+        document.getElementById("SP").disabled = true;
+        document.getElementById("AA").disabled = true;
+        document.getElementById("ISP").disabled = true;
+      }
+  
+  if ((AT.value !== '' && DDD.value !== '') && !(DDD.value == 6 || DDD.value == 10 || DDD.value == 8 && AT.value == 1 || (DDD.value == 9 && [4, 5, 6].includes(Number(AT.value))))) {
     // Enable PP select
     document.getElementById("PP").disabled = false;
 
     // Filter rows by selected DDD and AT values
-    const filteredRows = rows.filter(row => row.CodDemanda == selectDDD.value && row.CodAtividade == this.value);
+    const filteredRows = rows.filter(row => row.CodDemanda == DDD.value && row.CodAtividade == this.value);
 
     // Populate PP options
     const optionsPP = ['Produto'];
@@ -207,7 +288,7 @@ selectAT.addEventListener('change', function() {
     const sortedOptions = optionsPP.map((option, index) => ({ text: option, value: valuesPP[index] }))
       .sort((a, b) => a.value - b.value);
 
-    // Add sorted options to selectPP
+    // Add sorted options to PP
     for (let i = 0; i < sortedOptions.length; i++) {
       const option = document.createElement("option");
       option.text = sortedOptions[i].text;
@@ -215,36 +296,91 @@ selectAT.addEventListener('change', function() {
       PP.add(option);
     }
   } else {
-    clearSelectOptionsAndDisable("PP");
+  clearElement(PP);
   }
 });
 
-elements.PP.addEventListener('change', function() {
-  clearSelectOptionsAndDisable("YYYY");
-  clearSelectOptionsAndDisable("AA");
-  clearSelectOptionsAndDisable("SP");
-  clearSelectOptionsAndDisable("ISP");
+PP.addEventListener('change', function() {
 
-  if (elements.PP.value !== '' && elements.AT.value !== '' && elements.DDD.value !== '') {
+  clearElement(YYYY);
+  clearElement(AA);
+  clearElement(SP);
+  clearElement(ISP);
 
-    if ([1, 2, 3, 4].includes(Number(elements.DDD.value))) {
+  if (PP.value !== '' && AT.value !== '' && DDD.value !== '') {
 
-      fetchJsonAndPopulateSelectOptions('sprint.json', 'SP');
-      fetchJsonAndPopulateSelectOptions('ano.json', 'YYYY');
+    var ano, acao, sprint;
 
-      if (elements.DDD.value == 1) {
+    if ([1, 2, 3, 4].includes(Number(DDD.value))) {
+
+      fetch('sprint.json')
+        .then(response => response.json())
+        .then(data => {
+          // Use the data here
+          sprint = data;
+
+          // Create and append the options to the select element
+          sprint.forEach(function(item) {
+            const option = document.createElement("option");
+            option.value = item.value;
+            option.text = item.text;
+            SP.add(option);
+          });
+
+        })
+        .catch(error => {
+          // Handle errors here
+          console.error("Erro sprint.json: ", error);
+        });
+
+      fetch('ano.json')
+        .then(response => response.json())
+        .then(data => {
+          // Use the data here
+          ano = data;
+
+          // Create and append the options to the select element
+          ano.forEach(function(item) {
+            const option = document.createElement("option");
+            option.value = item.value;
+            option.text = item.text;
+            YYYY.add(option);
+          });
+        })
+        .catch(error => {
+          // Handle errors here
+          console.error("Erro ano.json: ", error);
+        });
+      if (DDD.value == 1) {
         document.getElementById("YYYY").disabled = false;
         document.getElementById("SP").disabled = true;
       }
-      if ([2, 3, 4].includes(Number(elements.DDD.value))) {
+      if ([2, 3, 4].includes(Number(DDD.value))) {
         document.getElementById("YYYY").disabled = false;
         document.getElementById("SP").disabled = false;
       }
-    } else if (elements.DDD.value == 5) {
+    } else if (DDD.value == 5) {
       document.getElementById("YYYY").disabled = false;
       document.getElementById("SP").disabled = true;
       let tasksSelect = document.getElementById("IPP");
-      fetchJsonAndPopulateSelectOptions('ano.json', 'YYYY');
+      fetch('ano.json')
+        .then(response => response.json())
+        .then(data => {
+          // Use the data here
+          ano = data;
+
+          // Create and append the options to the select element
+          ano.forEach(function(item) {
+            const option = document.createElement("option");
+            option.value = item.value;
+            option.text = item.text;
+            YYYY.add(option);
+          });
+        })
+        .catch(error => {
+          // Handle errors here
+          console.error("Erro ano.json: ", error);
+        });
       fetch('idEaudMonitoramento.json')
         .then(response => response.json())
         .then(data => {
@@ -258,83 +394,78 @@ elements.PP.addEventListener('change', function() {
       document.getElementById("IPP").disabled = false;
     }
   } else {
-    clearSelectOptionsAndDisable("YYYY");
-    clearSelectOptionsAndDisable("AA");
-    clearSelectOptionsAndDisable("SP");
+    clearElement(YYYY);
+    clearElement(AA);
+    clearElement(SP); 
   }
 
-  if ([2, 3, 4].includes(Number(elements.DDD.value))) {
+  clearElement(ISP);
+
+  if (([2, 3, 4].includes(Number(DDD.value)))) {
     document.getElementById("ISP").disabled = false;
-  } else if (elements.DDD.value === 5) {
+  } else if (DDD.value === 5) {
     document.getElementById("ISP").disabled = false;
   } else { document.getElementById("ISP").disabled = true; }
 });
 
-elements.YYYY.addEventListener('change', function() {
-  clearSelectOptionsAndDisable("AA");
+YYYY.addEventListener('change', function() {
 
-  if (!shouldFetchAnoJson(elements.DDD.value, elements.AT.value)) {
-    if ((elements.AT.value == 3 || elements.AT.value == 2) && elements.DDD.value == 1) {
-      document.getElementById("AA").disabled = true;
-    } else {
-      if (![12, 13, 14].includes(Number(elements.DDD.value))) {
-        fetchJsonAndPopulateSelectOptions('acao.json', 'AA');
+  AA.innerHTML = '';
+
+  if (!(DDD.value == 6 || DDD.value == 10 || DDD.value == 8 && AT.value == 1 || (DDD.value == 9 && [4, 5, 6].includes(Number(AT.value))))){
+  if ((AT.value == 3 || AT.value == 2) && DDD.value == 1) {
+    document.getElementById("AA").disabled = true;
+  } else {
+    if (![12, 13, 14].includes(Number(DDD.value))) {
+    fetch('acao.json')
+      .then(response => response.json())
+      .then(data => {
+        // Use the data here
+        acao = data;
+
+        // Filter acao by selected YYYY value
+        const filteredAcao = acao.filter(item => item.year == YYYY.value);
+
+        // Create and append the options to the AA select element
+        filteredAcao.forEach(function(item) {
+          const option = document.createElement("option");
+          option.value = item.value;
+          option.text = item.text;
+          AA.add(option);
+        });
         document.getElementById("AA").disabled = false;
-      }
+      })
+      .catch(error => {
+        // Handle errors here
+        console.error("Erro acao.json: ", error);
+      });
     }
   }
+}
 });
 
-elements.enviar.addEventListener("click", function(event) {
+// Adiciona um evento de clique 
+enviar.addEventListener("click", function(event) { // Previne o comportamento padrão do botão 
   event.preventDefault();
 
-  const PAA = elements.AA.value;
-  const PYYYY = elements.YYYY.value;
-  const PPP = elements.PP.value;
-  const PDDD = elements.DDD.value;
-  const PAT = elements.AT.value;
-  const PSP = elements.SP.value;
-  const PISP = elements.ISP.value;
+  // Aqui começa o seu código 
+  const PAA = AA.value; const PYYYY = YYYY.value; const PPP = PP.value; const PDDD = DDD.value; const PAT = AT.value; const PSP = SP.value; const PISP = ISP.value
 
-  elements.Ret.value = ('<demanda>' + PDDD + '</demanda><atividade>' + PAT + '</atividade><produto>' + PPP + '</produto><idEaud>' + PISP + '</idEaud><anoAcao>' + PYYYY + '</anoAcao><idAcao>' + PAA + '</idAcao><idSprint>' + PSP + '</idSprint>');
-
-  fetch('depara.json')
-    .then(response => response.json())
-    .then(data => {
-      // Filter rows by selected DDD, AT and PP values
-      const filteredRows = data.filter(row => row.CodDemanda == PDDD && row.CodAtividade == PAT && row.CodProduto == PPP);
-
-      // Get the Atividade2 and nº da atividade values from the filtered rows
-      let atividadePGDText = '';
-      if (filteredRows.length === 0) {
-        atividadePGDText = 'A descrição abaixo não corresponde com nenhuma atividade do PGD';
-      } else {
-        atividadePGDText = 'Sua descrição se encaixa na(s) seguinte(s) Atividade(s) do PGD: ';
-        atividadePGDText += filteredRows.map(row => `${row.Atividade2}-${row['nº da atividade']} Atividade PGD`).join(', ');
-      }
-
-      // Show the atividadePGDText in an alert
-      alert(atividadePGDText);
-    });
+  Ret.value = ('<demanda>' + PDDD + '</demanda><atividade>' + PAT + '</atividade><produto>' + PPP + '</produto><idEaud>' + PISP + '</idEaud><anoAcao>' + PYYYY + '</anoAcao><idAcao>' + PAA + '</idAcao><idSprint>' + PSP + '</idSprint>')
 });
 
-elements.apagar.addEventListener("click", event => {
+apagar.addEventListener("click", event => {
   event.preventDefault()
-  clearInputValue('AA');
-  clearInputValue('YYYY');
-  clearInputValue('PP');
-  clearInputValue('DDD');
-  clearInputValue('AT');
-  clearInputValue('SP');
-  clearInputValue('ISP');
-  clearInputValue('Ret');
-
-  clearSelectOptionsAndDisable("AT");
-  clearSelectOptionsAndDisable("PP");
-  clearSelectOptionsAndDisable("YYYY");
-  clearSelectOptionsAndDisable("AA");
-  clearSelectOptionsAndDisable("SP");
-  clearSelectOptionsAndDisable("ISP");
+  AA.value = ''
+  YYYY.value = ''
+  PP.value = ''
+  DDD.value = ''
+  AT.value = ''
+  SP.value = ''
+  ISP.value = ''
+  Ret.value = ''
+  AT.text = ''
+  PP.text = ''
 
   // Desabilita o elemento select
   const selects = document.querySelectorAll("select");
@@ -344,10 +475,10 @@ elements.apagar.addEventListener("click", event => {
 });
 
 function copiarResultado() {
-  if (elements.Ret.value == "") return;
+  if (Ret.value == "") return;
 
-  elements.Ret.select();
-  navigator.clipboard.writeText(elements.Ret.value);
+  Ret.select();
+  navigator.clipboard.writeText(Ret.value);
 }
 
 function fixText(text) {
@@ -358,7 +489,6 @@ function fixText(text) {
     'Ã£': 'ã',
     'Ã©': 'é',
     'Ãª': 'ê',
-    'Ã­': 'í',
     'Ã³': 'ó',
     'Ã´': 'ô',
     'Ãµ': 'õ',
@@ -374,39 +504,7 @@ function fixText(text) {
   return text;
 }
 
-<<<<<<< HEAD
 function clearElement(element) {
   element.innerHTML = '';
   element.disabled = true;
-=======
-function clearInputValue(inputId) {
-  document.getElementById(inputId).value = '';
-}
-
-function clearSelectOptionsAndDisable(selectId) {
-  const selectElement = document.getElementById(selectId);
-  selectElement.innerHTML = '';
-  selectElement.disabled = true;
-}
-
-function shouldFetchAnoJson(selectDDDValue, selectATValue) {
-  return selectDDDValue == 6 || selectDDDValue == 10 || selectDDDValue == 8 && selectATValue == 1 || (selectDDDValue == 9 && [4, 5, 6].includes(Number(selectATValue)));
-}
-
-function fetchJsonAndPopulateSelectOptions(jsonFile, selectId) {
-  fetch(jsonFile)
-    .then(response => response.json())
-    .then(data => {
-      const selectElement = document.getElementById(selectId);
-      data.forEach(function(item) {
-        const option = document.createElement("option");
-        option.value = item.value;
-        option.text = item.text;
-        selectElement.add(option);
-      });
-    })
-    .catch(error => {
-      console.error(`Erro ${jsonFile}: `, error);
-    });
->>>>>>> parent of e5ae606... Update app.js
 }
